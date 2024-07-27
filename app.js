@@ -8,6 +8,11 @@ let VarNum3 = 1_000_000;
 
 // - додавання:
 
+function sum(a, b); {
+    return a + b;
+}
+
+concole.log(sum(VarNum1, VarNum2));
 
 // - віднімання
 // - множення 
