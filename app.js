@@ -1,6 +1,6 @@
 // 1. Створіть 2 змінні з типом number:
 
-let VarNum1 = 11;
+let VarNum1 = 8;
 let VarNum2 = -2.5;
 let VarNum3 = 1_000_000;
 
@@ -8,11 +8,12 @@ let VarNum3 = 1_000_000;
 
 // - додавання:
 
+VarNum1 += 3; // 11
+
 function sum(a, b); {
     return a + b;
 }
-
-concole.log(sum(VarNum1, VarNum2));
+concole.log(sum(VarNum1, VarNum2)); // 11 - 2.5 = 8.5
 
 // - віднімання
 // - множення 
