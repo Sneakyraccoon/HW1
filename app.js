@@ -97,7 +97,7 @@ console.log(VarUndefind); // 36 Years
 Number.parseInt(VarUndefind, 10); 
 console.log(VarUndefind); // 36 
 */
-
+console.log(Number.parseInt(VarUndefind, 10)); // 36 
 
 VarUndefind = 36;
 console.log(VarUndefind); // 36 
