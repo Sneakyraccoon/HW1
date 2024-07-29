@@ -89,19 +89,14 @@ let VarUndefind;
 
 VarUndefind = "36 Years";
 console.log(VarUndefind); // 36 Years
-// - перетворіть її на число
 
-/*
-// Це чомусь не прцює. Мабуть через тип змінної (Any)
-"use strict";
-Number.parseInt(VarUndefind, 10); 
-console.log(VarUndefind); // 36 
-*/
+// - перетворіть її на число
 console.log(Number.parseInt(VarUndefind, 10)); // 36 
 
+/*
 VarUndefind = 36;
 console.log(VarUndefind); // 36 
- 
+ */
 // - перетворіть її на булеве значення
 
 
