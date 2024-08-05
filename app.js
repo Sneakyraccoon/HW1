@@ -5,29 +5,31 @@
 
 "use strickt";
 
-//const MaxValue = 100;
+//const Value = 100;
 
 // Попросимо користувача ввести число від 0 до 100
-let MaxValue = prompt("Please enter an integer from 0 to 100", 0);
+let Value = prompt("Please enter an integer from 0 to 100", 0);
 
 // Перетворимо значення, яке ввів користувач, щоб точно отримати намбер
-MaxValue = Number.parseInt(MaxValue, 10);
+Value = Number.parseInt(Value, 10);
 
 // Якщо користувач ввів не намбер (NaN) - видамо повідомлення
-if (isNaN(MaxValue)) {
-    alert("Введене значення не є числом");
+if (isNaN(Value)) {
+    alert("Таке чуство шо Бог десь наказує нас за шось");
   }
 
-  console.log(MaxValue);
+  console.log(Value);
 
   // Ця ф-ція поверне "true" якщо число (num) є кратним дільнику (divisor)
+  // ми це використаємо і для 1-го і 2-го завдання.
+  // В 1-му для перевірки на кратнічть 3 і 5, в 2-му для перевірки парності (кратності 2-м)
   function isMultiple(num, divisor) {
     return num % divisor === 0;
   }
 
 
-
-for (let index = 0; index <= MaxValue; index++) {
+// Тепер побудуємо цикл, в якому перевіримо кожне число від 0 до Value
+for (let index = 0; index <= Value; index++) {
  //   if (index % 3) { if (index % 5){} }
         
  if ( isMultiple(index, 3) === true ) { 
@@ -36,10 +38,27 @@ for (let index = 0; index <= MaxValue; index++) {
     } else {
         console.log( `Лол`); // Число кратне тільки 3 
     }
-
-    
  } else if (isMultiple(index, 5) === true) {
     console.log( `Кек`); // Число кратне тільки 5
  } else{ console.log( index); } // Число не кратне ні 3 ні 5
 
-}
+ // Це 2-га частина домашки з циклом FOR
+
+ if (isMultiple(index, 2) === true && index < Value) {
+  console.log( index); } // Парні числа, які менші за початкове (Value)
+ } 
+
+
+
+// 2. Напишіть код який бере значення зі змінної (`value`) і виводить у консоль всі парні числа, що менші за задане.
+// Наприклад, якщо у змінній число 10, програма має вивести наступне: 2, 4, 6, 8. Додаткові вимоги:
+
+// a) Реалізуйте рішення 2 способами: з використанням циклу `for` та `while`
+
+// b) Код має перевіряти, чи значення у змінній є числом. Якщо воно не є числом,  в консоль має вивестись повідомлення про помилку, наприклад `'Таке чуство шо Бог десь наказує нас за шось'`.
+index = 0;
+do {
+  if (isMultiple(index, 2) === true) {
+    console.log( index); } // Парні числа, які менші за початкове (Value)
+  index++;
+} while (index < Value);
