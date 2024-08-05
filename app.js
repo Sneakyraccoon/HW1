@@ -40,6 +40,6 @@ for (let index = 0; index <= MaxValue; index++) {
     
  } else if (isMultiple(index, 5) === true) {
     console.log( `Кек`); // Число кратне тільки 5
- } else
+ } else{ console.log( index); } // Число не кратне ні 3 ні 5
 
 }
