@@ -16,34 +16,30 @@ console.log(recursiveOddSumTo(10)) // 25
 */
 
 // Попросимо користувача ввести число від 0 до 100
-let value = prompt("Please enter an integer from 0 to 100", 0);
+let number = prompt("Please enter an integer from 0 to 100", 0);
 
 // Перетворимо значення, яке ввів користувач, щоб точно отримати намбер
-value = Number.parseInt(Value, 10);
+number = Number.parseInt(Value, 10);
 
-// Якщо користувач ввів не намбер (NaN) - видамо повідомлення
-if (isNaN(value)) {
+// Якщо користувач ввів не намбер (NaN), або не додатнє число- видамо повідомлення
+if (isNaN(number) || number < 0) {
     alert("Таке чуство шо Бог десь наказує нас за шось");
   }
 
-  console.log(value);
+  console.log(number);
 
+// Напишимо ф-цію, яка робить суму усіх непарних додатніх чисел від 0 до 'number'
+// Наприклад, якщо  'number' = 10, то функція має повернути 9 + 7 + 5 + 3 + 1 = 25
+// При цьому, використавши "рекурсію", тобто викликавши саму себе в середині ф-ції
+  function sumOddNumbers(number) {
 
-
-
-  function sumOddNumbers(n) {
-      // тут ваш код
-    // Базовый случай: если n меньше 1, возвращаем 0
-    if (n < 1) {
-        return 0;
-    }
-
-    // Проверяем, является ли n непарным числом
-    const isOdd = n % 2 !== 0;
+    // Перевіка на непарність. Тут вираховується чи є 'number' непарним.
+    // Якщо 'number' є непарним, isOdd буде = True, якщо 'number' є парним, isOdd буде = false
+    const isOdd = number % 2 !== 0;
 
     // Если непарное, добавляем его к сумме оставшихся чисел
     // Если парное, просто продолжаем с предыдущим числом
-    return (isOdd ? n : 0) + sumOddNumbers(n - 1);
+    return (isOdd ? number : 0) + sumOddNumbers(n - 1);
 }
 
 
