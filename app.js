@@ -15,6 +15,18 @@ console.log(recursiveOddSumTo(1)) // 1
 console.log(recursiveOddSumTo(10)) // 25
 */
 
+// Попросимо користувача ввести число від 0 до 100
+let value = prompt("Please enter an integer from 0 to 100", 0);
+
+// Перетворимо значення, яке ввів користувач, щоб точно отримати намбер
+value = Number.parseInt(Value, 10);
+
+// Якщо користувач ввів не намбер (NaN) - видамо повідомлення
+if (isNaN(value)) {
+    alert("Таке чуство шо Бог десь наказує нас за шось");
+  }
+
+  console.log(value);
 
 
 
