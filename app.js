@@ -104,7 +104,44 @@ console.log(vowelFilter2(userNames2));
 // console.log(typeof reverseMaxValue); // 'number'
 
 // В JS можна розвернути масив за допомогою вбудованого метода "reverse"
-// тому нам треба перетворити наш num на масив - за допомогою метода split(''), який поверне масив, у якому включені всі наші цифри з числа 4589 - ["4", "5", "8", "9"]
+// тому нам треба перетворити наш num на стірнг за допомогою метода toString()
+// потім стрінг пететворити на масив - за допомогою метода split(''), який поверне масив, у якому включені всі наші цифри зі стрінга "4589" - ["4", "5", "8", "9"]
+// потім застосувати метод reverse(), який переверне масив  ["4", "5", "8", "9"] -> ["9", "8", "5", "4"]
+// потім метод join() обєднає едементи перевернутого масиву у стрінг ["9", "8", "5", "4"] ->  "9854"
+// потім стрінг перетворити на num за допомогою метода parseInt(стрінг, 10);
+
+const currentMaxValue = 4589;
+
+function reverseNumber(num) {
+  // Нум -> в стрінг
+  let newString = num.toString();
+  
+  // Стрінг -> в масив
+  let newArray = newString.split('');
+  
+  // Розвертаємо масив
+  let newReversedArray = newArray.reverse();
+  
+  // Обєднуємо всі елементи масиву в стрінг
+  let newReversedString = newReversedArray.join('');
+  
+  // перетворюємо стрінг на нум
+  let reversedNum = parseInt(newReversedString, 10);
+  
+  return reversedNum;
+}
+
+console.log(reverseNumber(currentMaxValue));
+
+// Знайшов в гуглі більш крутий варіант запису:
+function reverseNumber2(num) {
+// тут ми одразу викликаємо один за одним всі методи  toString  split reverse join в середині ф-ції parseInt
+  return parseInt(num.toString().split('').reverse().join(''), 10);
+  
+  return reversedNum;
+}
+
+console.log(reverseNumber2(currentMaxValue));
  
 // 4. Задача на знаходження добутку масиву чисел з невідомою глибиною вкладеності:
 
