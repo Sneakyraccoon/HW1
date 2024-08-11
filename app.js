@@ -151,3 +151,28 @@ console.log(reverseNumber2(currentMaxValue));
 // // тут ваш код...
 
 // console.log(productOfArray); // 24
+
+
+const resultsArray = [1, 2, [3, [4, "5", "Hello World!"], 2, 10], 7];
+
+function multArrayNumbers(iArr) {
+// В цю змінну будемо складати добутки (1 * число масива 1 * исло масива 2 ітд)  
+  let counter = 1;
+
+  function multiply(iArr) { // Внутрішня ф-ція
+      for (let element of iArr) { // Це цикл по елементах масиву. у змінній "element" при кожній ітерації буде знаходитись новий елемент масиву
+          if (Array.isArray(element)) { // Давайте перевіримо чи поточний елемент в ітерації є (вкладеним) масивом.
+              multiply(element); // Якщо "element" - це масив, викликаємо внутрішню ф-цію "multiply" рекурсивно.
+          } else if (typeof element === 'number') { // Інакше ("element" - НЕ масив) якщо поточний елемент масиву "element" - є числом
+              counter *= element; // то множимо його на "counter" і складаємо результат в "counter"
+          }
+      }
+  }
+
+  multiply(iArr);
+
+  return counter;
+}
+
+
+console.log(multArrayNumbers(resultsArray)); 1 * 2 * 3 * 4 * 2 * 10 * 7 = 3360
