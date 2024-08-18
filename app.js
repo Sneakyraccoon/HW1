@@ -46,10 +46,7 @@ function addThemAll2(...arguments) {
 
 console.log(addThemAll2(2, "1", [10], 4)); // 6
 
-
-
-
-//  2. Задача на використання замикання. 
+//  2. Задача на використання замикання.
 
 //   Напишіть функцію яка працює таким чином: multiply(a)(b)  // a * b
 
@@ -60,3 +57,13 @@ console.log(addThemAll2(2, "1", [10], 4)); // 6
 // function multiply(a) {
 // 	// тут ваш код*
 // }
+
+function multiply(a) {
+  return function (b) {
+    return a * b;
+  };
+}
+
+console.log(multiply(5)(5)); // 25
+console.log(multiply(2)(-2)); // -4
+console.log(multiply(4)(3)); // 12
