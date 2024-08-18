@@ -86,3 +86,32 @@ console.log(durationBetweenDates("31 Jan 2022", "03 Feb 2021", "days")); // по
 
 // let updatedPriceData = optimizer(priceData);
 // console.log(updatedPriceData) // {apples: '23.40', bananas: '48.00', oranges: '48.76'}
+
+const priceData = {
+  Apples: "23.4",
+  BANANAS: "48",
+  oRAngGEs: "48.7584",
+};
+
+function optimizer(priceList) {
+  // Створимо новий обєкт "optimizedList", у який ми складемо перетворені ключі і значення із вхідного обєкту
+  const optimizedList = {};
+  // Пройдемося циклом по всім ключам обєкту
+  for (const key in priceList) {
+    // Перетворимо ключ у нижній регістр і покладем значення у змінну lowerCaseKey
+    const lowerCaseKey = key.toLowerCase();
+    // За допомогою метода parseFloat() перетворимо стрінгове значення ключа на числове.
+    const numKey = parseFloat(priceList[key]);
+    console.log(numKey);
+    // За допомогою метода .toFixed() округлимо числове значення ключа (numKey) до 2-х знаків після коми і покладем значення у змінну roundedPrice
+    const roundedPrice = numKey.toFixed(2);
+    console.log(roundedPrice);
+    // Запишимо новий ключ у нижньому регісті (lowerCaseKey) і його значення, округлене до 2-х знаків після коми (roundedPrice) у новий обєкт optimizedList.
+    optimizedList[lowerCaseKey] = roundedPrice;
+  }
+  return optimizedList;
+}
+
+
+let updatedPriceData = optimizer(priceData);
+console.log(updatedPriceData) // {apples: '23.40', bananas: '48.00', oranges: '48.76'}
