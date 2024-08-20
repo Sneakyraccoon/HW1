@@ -111,3 +111,64 @@ console.log(multiply(4)(3)); // 12
 // function byProperty(property, direction) {
 // 	// тут ваш код
 // }
+
+const movies = [
+  {
+    movieName: "The Thing",
+    releaseYear: 1982,
+    directedBy: "Carpenter",
+    runningTimeInMinutes: 109,
+  },
+  {
+    movieName: "Aliens",
+    releaseYear: 1986,
+    directedBy: "Cameron",
+    runningTimeInMinutes: 137,
+  },
+  {
+    movieName: "Men in Black",
+    releaseYear: 1997,
+    directedBy: "Sonnenfeld",
+    runningTimeInMinutes: 98,
+  },
+  {
+    movieName: "Predator",
+    releaseYear: 1987,
+    directedBy: "McTiernan",
+    runningTimeInMinutes: 107,
+  },
+];
+
+// Тут я не памятаю який спосіб ми розбирали на уроці, тому просто гуглив і дивився різні приклади :D
+
+function byProperty(property, direction) {
+  // Запишимо внутрішню ф-цію порівняння. Порівнюватись будуть почергово всі пари елементів масива. Детальніше буде описано на етапі виклику метода sort()
+  return function (a, b) {
+    if (direction === ">") {
+      // Ми сортуємо від більшого до меншого Descending
+      // Якщо параметр елементу a більший за параметр елементу b, то повертаємо -1 (що означає що a має бути перед b)
+      // інакше повренемо 1 (що означає що   b має бути перед а)
+      return a[property] > b[property] ? -1 : 1;
+    } else if (direction === "<") {
+      // Ми сортуємо від меншого до більшого Ascending
+      return a[property] < b[property] ? 1 : -1;
+    } else {
+      throw new Error('Некоректна опція напряму сортування. Будь-ласка використовуйте ">" or "<".');
+    }
+  };
+}
+
+// Метод масиву sort() самостійно ініціює цикл, в якому передасть пари елементів масиву до ф-ції порівняння " return function(a, b) {" у якості аргументів.
+// Приклад: на першій ітерації:
+//    а = movieName: 'The Thing', releaseYear: 1982, directedBy: 'Carpenter', runningTimeInMinutes: 109,
+//    b =     movieName: 'Aliens', releaseYear: 1986, directedBy: 'Cameron', runningTimeInMinutes: 137,
+//        на другій ітерації:
+//    а =     movieName: 'Aliens', releaseYear: 1986, directedBy: 'Cameron', runningTimeInMinutes: 137,
+//    b =     movieName: 'Men in Black', releaseYear: 1997, directedBy: 'Sonnenfeld', runningTimeInMinutes: 98,
+//        на другій ітерації:
+//    a =     movieName: 'Men in Black', releaseYear: 1997, directedBy: 'Sonnenfeld', runningTimeInMinutes: 98,
+//    b =     movieName: 'Predator', releaseYear: 1987, directedBy: 'McTiernan', runningTimeInMinutes: 107,
+
+console.log(movies.sort(byProperty("releaseYear", ">")));
+console.log(movies.sort(byProperty("runningTimeInMinutes", "<")));
+console.log(movies.sort(byProperty("movieName", ">")));
