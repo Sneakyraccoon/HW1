@@ -151,7 +151,7 @@ function byProperty(property, direction) {
       return a[property] > b[property] ? -1 : 1;
     } else if (direction === "<") {
       // Ми сортуємо від меншого до більшого Ascending
-      return a[property] < b[property] ? 1 : -1;
+      return a[property] < b[property] ? -1 : 1;
     } else {
       throw new Error('Некоректна опція напряму сортування. Будь-ласка використовуйте ">" or "<".');
     }
@@ -169,6 +169,8 @@ function byProperty(property, direction) {
 //    a =     movieName: 'Men in Black', releaseYear: 1997, directedBy: 'Sonnenfeld', runningTimeInMinutes: 98,
 //    b =     movieName: 'Predator', releaseYear: 1987, directedBy: 'McTiernan', runningTimeInMinutes: 107,
 
-console.log(movies.sort(byProperty("releaseYear", ">")));
-console.log(movies.sort(byProperty("runningTimeInMinutes", "<")));
-console.log(movies.sort(byProperty("movieName", ">")));
+ console.log(movies.sort(byProperty("releaseYear", ">")));
+ console.log(movies.sort(byProperty("runningTimeInMinutes", "<")));
+ console.log(movies.sort(byProperty("movieName", ">")));
+ // Чомусь в консолі всі 3 рази відображається сортування за останнім критерієм "movieName", ">"
+ // Якщо я хочу перевірити всі сортування, треба запускати console.log по черзі для кожної умови сортування. Це нормально? Чи я щось нахімічив? 
