@@ -153,7 +153,9 @@ function byProperty(property, direction) {
       // Ми сортуємо від меншого до більшого Ascending
       return a[property] < b[property] ? -1 : 1;
     } else {
-      throw new Error('Некоректна опція напряму сортування. Будь-ласка використовуйте ">" or "<".');
+      throw new Error(
+        'Некоректна опція напряму сортування. Будь-ласка використовуйте ">" or "<".'
+      );
     }
   };
 }
@@ -169,8 +171,57 @@ function byProperty(property, direction) {
 //    a =     movieName: 'Men in Black', releaseYear: 1997, directedBy: 'Sonnenfeld', runningTimeInMinutes: 98,
 //    b =     movieName: 'Predator', releaseYear: 1987, directedBy: 'McTiernan', runningTimeInMinutes: 107,
 
- console.log(movies.sort(byProperty("releaseYear", ">")));
- console.log(movies.sort(byProperty("runningTimeInMinutes", "<")));
- console.log(movies.sort(byProperty("movieName", ">")));
- // Чомусь в консолі всі 3 рази відображається сортування за останнім критерієм "movieName", ">"
- // Якщо я хочу перевірити всі сортування, треба запускати console.log по черзі для кожної умови сортування. Це нормально? Чи я щось нахімічив? 
+console.log(movies.sort(byProperty("releaseYear", ">")));
+console.log(movies.sort(byProperty("runningTimeInMinutes", "<")));
+console.log(movies.sort(byProperty("movieName", ">")));
+// Чомусь в консолі всі 3 рази відображається сортування за останнім критерієм "movieName", ">"
+// Якщо я хочу перевірити всі сортування, треба запускати console.log по черзі для кожної умови сортування. Це нормально? Чи я щось нахімічив?
+
+//  4. Напишіть функцію яка відфільтрує масив унікальних значень
+
+// Рішення має працювати незалежно від конкретних значень в масиві імен
+
+// const userNames = ['Петро', 'Емма', 'Петро', 'Емма', 'Марта', 'Яна', 'Василь', 'Антон', 'Олена', 'Емма'];
+
+// function filterUnique(array) {
+// // тут ваш код
+// }
+
+// console.log(filterUnique(userNames)); // ['Петро', 'Емма', 'Марта', 'Яна', 'Василь', 'Антон', 'Олена'];
+
+const userNames = [
+  "Петро",
+  "Емма",
+  "Петро",
+  "Емма",
+  "Марта",
+  "Яна",
+  "Василь",
+  "Антон",
+  "Олена",
+  "Емма",
+];
+
+function filterUnique(inputArray) {
+  // Створимо сет із масива. Сет автоматично прибере всі дублікати і залишить лише унікаль значення, нам непотрібно нічого додатково робити
+  let uniqueSet = new Set(inputArray);
+  // створимо новий масив, у якому будуть міститись лише унікальні значення
+  let uniqueArray = [];
+  // Тепер в циклі forEach по сету uniqueSet запишимо коже значення сета в новий масив
+  uniqueSet.forEach((value) => uniqueArray.push(value));
+  return uniqueArray;
+}
+
+console.log(filterUnique(userNames)); // ['Петро', 'Емма', 'Марта', 'Яна', 'Василь', 'Антон', 'Олена']
+
+// Також нагуглив більш простішу форму запису
+
+function filterUnique2(inputArray) {
+  // Set створює новий сет без дублів
+  // Спред оператор ... перетворює сет на масив
+  // [] на початку і кінці створюють новий масив
+
+  return [...new Set(inputArray)];
+}
+
+console.log(filterUnique2(userNames)); // ['Петро', 'Емма', 'Марта', 'Яна', 'Василь', 'Антон', 'Олена']
