@@ -67,5 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("buttonState", button.textContent);
     localStorage.setItem("statusMessage", statusMessage.textContent);
     localStorage.setItem("backgroundColor", body.style.backgroundColor);
+    // Виправлення зауваження: Для того щоб колір тексту не мінявся після перезавантаження сторінки, додамо його в локал сторидж
+    localStorage.setItem("statusColor", statusMessage.style.color);
   });
 });
