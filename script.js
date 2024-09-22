@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Завантажуємо початковий колір фону з localStorage. Якщо даних немає (ми пеорший раз зайшли на сайт), залишаємо фон білим
   const savedBackground = localStorage.getItem("backgroundColor");
 
+// Виправлення зауваження: Початковий колір тексту забираємо з локал сториджа
+  const savedColor = localStorage.getItem("statusColor");
+
   // Якщо збережений стан кнопки існує в localStorage, встановлюємо його
   if (savedState) {
     button.textContent = savedState;
@@ -27,6 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Якщо збережений колір фону існує, встановлюємо його
   if (savedBackground) {
     body.style.backgroundColor = savedBackground;
+  }
+
+  // Виправлення зауваження: Початковий колір тексту забираємо з локал сториджа
+  if (savedColor) {
+    statusMessage.style.color = savedColor;
   }
 
   // Додаємо івент лісенер для кнопки, який виконується при натисканні
