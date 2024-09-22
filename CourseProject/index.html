@@ -9,10 +9,12 @@
 <body>
     <div class="container">
         <div id="window1" class="window active">
-            <label for="startDate">С:</label>
-            <input type="date" id="startDate" name="startDate">
-            <label for="endDate">По:</label>
-            <input type="date" id="endDate" name="endDate">
+            <div class="date-picker">
+                <label for="startDate">С:</label>
+                <input type="date" id="startDate" name="startDate" onchange="validateDates()">
+                <label for="endDate">По:</label>
+                <input type="date" id="endDate" name="endDate" onchange="validateDates()" disabled>
+            </div>
         </div>
         <div id="window2" class="window">Window 2</div>
         <div class="circles">
