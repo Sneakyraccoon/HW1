@@ -15,6 +15,10 @@
                 <label for="endDate">По:</label>
                 <input type="date" id="endDate" name="endDate" onchange="validateDates()" disabled>
             </div>
+            <div class="options">
+                <button id="week" onclick="setPeriod('week')" disabled>Неделя</button>
+                <button id="month" onclick="setPeriod('month')" disabled>Месяц</button>
+            </div>
         </div>
         <div id="window2" class="window">Window 2</div>
         <div class="circles">
