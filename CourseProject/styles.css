@@ -1,90 +1,101 @@
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
 }
 .container {
-    text-align: center;
-    position: relative;
+  text-align: center;
+  position: relative;
 }
 .window {
-    width: 50vw; /* 50% от ширины окна браузера */
-    height: 25vh; /* 25% от высоты окна браузера */
-    border: 2px solid #4CAF50;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5em;
-    color: #333;
-    opacity: 0;
-    transition: opacity 0.5s, transform 0.5s;
-    transform: translateX(-50%) scale(0.9);
-    flex-direction: column;
+  width: 50vw; /* 50% от ширины окна браузера */
+  height: 25vh; /* 25% от высоты окна браузера */
+  border: 2px solid #4caf50;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  color: #333;
+  opacity: 0;
+  transition: opacity 0.5s, transform 0.5s;
+  transform: translateX(-50%) scale(0.9);
+  flex-direction: column;
 }
 .window.active {
-    display: flex;
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
+  display: flex;
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 .date-picker {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    width: 100%; /* Добавлено для растягивания по ширине */
-    flex-direction: row; /* Убедимся, что элементы располагаются в строку */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%; /* Добавлено для растягивания по ширине */
+  flex-direction: row; /* Убедимся, что элементы располагаются в строку */
 }
-.date-picker label, .date-picker input {
-    width: auto; /* Добавлено для автоматической ширины */
+.date-picker label,
+.date-picker input {
+  width: auto; /* Добавлено для автоматической ширины */
 }
 .circles {
-    display: flex;
-    justify-content: center;
-    margin-top: 30vh; /* Отступ сверху для кружочков */
+  display: flex;
+  justify-content: center;
+  margin-top: 30vh; /* Отступ сверху для кружочков */
 }
 .circle {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #ccc;
-    margin: 0 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 .circle.active {
-    background-color: #4CAF50;
+  background-color: #4caf50;
 }
 .circle:hover {
-    background-color: #888;
+  background-color: #888;
 }
 .options {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 .options button {
-    padding: 10px 20px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 .options button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 .options button:hover:not(:disabled) {
-    background-color: #45a049;
+  background-color: #45a049;
+}
+
+.radio-options {
+  margin-top: 10px;
+}
+.radio-options label {
+  margin-right: 10px;
+}
+.radio-options input:disabled + label {
+  color: #ccc;
 }
