@@ -1,58 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Switchable Windows</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <div id="window1" class="window active">
-        <div class="date-picker">
-          <label for="startDate">С:</label>
-          <input
-            type="date"
-            id="startDate"
-            name="startDate"
-            onchange="validateDates()"
-          />
-          <label for="endDate">По:</label>
-          <input
-            type="date"
-            id="endDate"
-            name="endDate"
-            onchange="validateDates()"
-            disabled
-          />
-        </div>
-        <div class="options">
-          <button id="week" onclick="setPeriod('week')" disabled>Неделя</button>
-          <button id="month" onclick="setPeriod('month')" disabled>
-            Месяц
-          </button>
-        </div>
-        <div class="radio-options">
-          <label
-            ><input type="radio" name="days" value="all" disabled /> Всі
-            дні</label
-          >
-          <label
-            ><input type="radio" name="days" value="weekdays" disabled /> Будні
-            дні</label
-          >
-          <label
-            ><input type="radio" name="days" value="weekends" disabled />
-            Вихідні дні</label
-          >
-        </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Switchable Windows</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div id="window1" class="window active">
+      <div class="date-picker">
+        <label for="startDate">З:</label>
+        <input type="date" id="startDate" name="startDate" onchange="validateDates()" />
+        <label for="endDate">По:</label>
+        <input type="date" id="endDate" name="endDate" onchange="validateDates()" disabled />
       </div>
-      <div id="window2" class="window">Window 2</div>
-      <div class="circles">
-        <div class="circle active" onclick="switchWindow(1)"></div>
-        <div class="circle" onclick="switchWindow(2)"></div>
+      <div class="options">
+        <button id="week" onclick="setPeriod('week')" disabled>Тиждень</button>
+        <button id="month" onclick="setPeriod('month')" disabled>
+          Місяць
+        </button>
+        <!-- <button id="calculateDays" onclick="calculate('days')" disabled>Порахувати кількість днів</button>
+        <button id="calculateHours" onclick="calculate('hours')" disabled>Порахувати кількість годин</button>
+        <button id="calculateMinutes" onclick="calculate('minutes')" disabled>Порахувати кількість хвилин</button>
+        <button id="calculateSeconds" onclick="calculate('seconds')" disabled>Порахувати кількість секунд</button> -->
       </div>
     </div>
-    <script src="script.js"></script>
-  </body>
+    <div class="radio-options">
+      <label><input type="radio" name="days" value="all" disabled /> Всі
+        дні</label>
+      <label><input type="radio" name="days" value="weekdays" disabled /> Будні
+        дні</label>
+      <label><input type="radio" name="days" value="weekends" disabled />
+        Вихідні дні</label>
+    </div>
+  </div>
+  <div id="window2" class="window">Window 2</div>
+  <div class="circles">
+    <div class="circle active" onclick="switchWindow(1)"></div>
+    <div class="circle" onclick="switchWindow(2)"></div>
+  </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
 </html>

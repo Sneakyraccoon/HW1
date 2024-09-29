@@ -53,7 +53,13 @@ function validateDates() {
   }
 
   if (endDate) {
-    localStorage.setItem("endDate", endDate);
+// Якщо користувач обрав СтартДейт, яка є більшою за ЕндДейт, тоді очистимо поле ЕндДейт і приберемо його з локалсториджа    
+    if (new Date(startDate) > new Date(endDate)) {
+      endDateInput.value = "";
+      localStorage.removeItem("endDate");
+    } else {
+      localStorage.setItem("endDate", endDate);
+    }
   } else {
     localStorage.removeItem("endDate");
   }
