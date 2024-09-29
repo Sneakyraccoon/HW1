@@ -11,17 +11,18 @@ body {
   text-align: center;
   position: relative;
 }
+
 .window {
   width: 50vw; /* 50% от ширины окна браузера */
-  height: 25vh; /* 25% от высоты окна браузера */
+  height: 50vh; /* 50% от высоты окна браузера */
   border: 2px solid #4caf50;
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 10px; /* Устанавливаем отступ сверху */
+  left: 10px; /* Устанавливаем отступ слева */
+  transform: translateX(0); /* Убираем смещение по оси X */
   display: none;
   justify-content: center;
   align-items: center;
@@ -29,14 +30,15 @@ body {
   color: #333;
   opacity: 0;
   transition: opacity 0.5s, transform 0.5s;
-  transform: translateX(-50%) scale(0.9);
+  transform: scale(0.9); /* Убираем смещение по оси X */
   flex-direction: column;
 }
 .window.active {
   display: flex;
   opacity: 1;
-  transform: translateX(-50%) scale(1);
+  transform: scale(1); /* Убираем смещение по оси X */
 }
+
 .date-picker {
   display: flex;
   justify-content: center;
