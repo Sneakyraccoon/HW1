@@ -163,17 +163,25 @@ body {
 
 
 
+
 .filters-bar {
-  position: absolute; /* Закрепляем панель в пределах окна */
-  top: 0; /* Прикрепляем к верхней части window1 */
-  left: 0; /* Прикрепляем к левой части window1 */
-  width: 100%; /* Растягиваем панель по всей ширине окна */
-  background-color: #fff; /* Белый фон для панели */
-  z-index: 10; /* Чтобы панель была поверх других элементов */
-  padding: 15px; /* Добавляем отступы */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень для создания глубины */
-  border-bottom: 2px solid #4caf50; /* Добавляем границу внизу */
-  border-radius: 10px 10px 0 0; /* Закругляем верхние углы */
+  display: flex; /* Используем flexbox для выравнивания элементов */
+  justify-content: flex-start; /* Выравниваем элементы в начале */
+  gap: 20px; /* Добавляем отступы между элементами */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* Уменьшаем ширину панели, чтобы она не выходила за границы */
+  
+  background-color: #ccc; /* Светлый фон для контраста */
+  z-index: 10;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #4caf50; /* Добавляем цветной бордер */
+  border-radius: 10px 10px 0 0;
+  overflow: hidden; /* Обрезаем содержимое, если оно выходит за границы */
+  box-sizing: border-box; /* Включаем padding и border в расчет ширины */
+  transition: all 0.3s ease-in-out;
 }
 
 
@@ -185,7 +193,7 @@ body {
   }
 }
 
-.filter-group, .color-filter-group {
+.filter-group {
   display: inline-block;
   &:focus {
     .filter-options {
@@ -195,7 +203,8 @@ body {
   }
 }
 
-.color-filter-group .filter-options {
+.filter-options {
+  display: none; /* Скрыть по умолчанию */
   max-height: 277px;
 }
 
@@ -242,12 +251,15 @@ body {
 }
 
 .filter-options {
-  height: 0;
+  /* height: 0; */
+  height: auto; /* Автоматическая высота */
+  max-height: none; /* Убираем максимальную высоту */
   transition: height .5s;
   position: absolute;
-  width: @columnWidth * @numColumns;
-  max-height: @maxHeight;
-  background-color: @menu_backgroundColor; 
+
+
+  width: 200px;
+  background-color: #fff;
  box-shadow: 0 2px 2px rgba(0,0,0,0.2); 
   .open-sans-light();
   overflow-x: hidden;
@@ -298,7 +310,7 @@ ul.filter-options-list {
 }
 
 ul.color-filter-options-list {
-  columns: @numColumns;
+  columns: 1;
   column-gap: 0px;
   column-fill: auto;
   padding: 10px;

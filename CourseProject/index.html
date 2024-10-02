@@ -1,113 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Журавльов О. Курсовий проект</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <!--Підключимо бібліотеку jquery для можливості додати календар -->
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Журавльов О. Курсовий проект</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" /> <!--Підключимо бібліотеку jquery для можливості додати календар -->
-</head>
-
-<body>
-  <div class="container">
-    <div id="window1" class="window active">
-      <!-- <div class="filter-bar">
+  <body>
+    <div class="container">
+      <div id="window1" class="window active">
+        <!-- <div class="filter-bar">
         <div class="radio-options">
           <label><input type="radio" name="days" value="all" disabled /> Всі дні</label>
           <label><input type="radio" name="days" value="weekdays" disabled /> Будні дні</label>
           <label><input type="radio" name="days" value="weekends" disabled /> Вихідні дні</label>
         </div>
       </div> -->
-      <!-- <div class="filter-bar"></div>
+        <!-- <div class="filter-bar"></div>
         <label><input type="radio" name="days" value="all" checked /> Всі дні</label>
         <label><input type="radio" name="days" value="weekdays" /> Будні дні</label>
         <label><input type="radio" name="days" value="weekends" /> Вихідні дні</label>
       </div> -->
 
+        <div class="filters-bar">
+          <ul class="all-filters-bar">
+            <!-- Фильтры -->
 
-
-      <div class="filters-bar">
-        <ul class="all-filters-bar">
-          <!-- Фильтры -->
-          <li class="filter-group" data-type="size" tabindex="1">
-            <div class="filter-group-trigger">
-              <h3>Size<span class="drop-down-arrow"></span></h3>
-            </div>
-            <div class="filter-options">
-              <div class="filter-options-tools">
-                <div class="rue-checkbox">
-                  <input type="checkbox" id="option_all">
-                  <label for="option_all"></label>
-                </div>
-                <label for="option_all">All sizes</label>
-                <a class="clear-selections">Clear selections</a>
+            <li class="filter-group" data-type="days" tabindex="1">
+              <div class="filter-group-trigger" onclick="toggleFilter(this)">
+                <h3>DAYS<span class="drop-down-arrow"></span></h3>
               </div>
-              <ul class="filter-options-list">
-                <li class="filter-options-item">
+              <div class="filter-options">
+                <div class="filter-options-tools">
                   <div class="rue-checkbox">
-                    <input type="checkbox" id="option_opt_size_0">
-                    <label for="option_opt_size_0"></label>
+                    <input type="checkbox" id="option_all" />
+                    <label for="option_all"></label>
                   </div>
-                  <label for="option_opt_size_0">XXS</label>
-                </li>
-                <li class="filter-options-item">
+                  <label for="option_all">Select All</label>
+                  <a class="clear-selections">Clear selections</a>
+                </div>
+                <ul class="filter-options-list">
+                  <li class="filter-options-item">
+                    <div class="rue-checkbox">
+                      <input type="checkbox" id="option_opt_size_1" />
+                      <label for="option_opt_size_1"></label>
+                    </div>
+                    <label for="option_opt_size_1">All days</label>
+                  </li>
+                  <li class="filter-options-item">
+                    <div class="rue-checkbox">
+                      <input type="checkbox" id="option_opt_size_0" />
+                      <label for="option_opt_size_0"></label>
+                    </div>
+                    <label for="option_opt_size_0">Weekdays</label>
+                  </li>
+                  <li class="filter-options-item">
+                    <div class="rue-checkbox">
+                      <input type="checkbox" id="option_opt_size_1" />
+                      <label for="option_opt_size_1"></label>
+                    </div>
+                    <label for="option_opt_size_1">Weekends</label>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li class="filter-group" data-type="units" tabindex="1">
+              <div class="filter-group-trigger" onclick="toggleFilter(this)">
+                <h3>UNITS<span class="drop-down-arrow"></span></h3>
+              </div>
+              <div class="filter-options">
+                <div class="filter-options-tools">
                   <div class="rue-checkbox">
-                    <input type="checkbox" id="option_opt_size_1">
-                    <label for="option_opt_size_1"></label>
+                    <input type="checkbox" id="option_all" />
+                    <label for="option_all"></label>
                   </div>
-                  <label for="option_opt_size_1">XX-Small</label>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </div>
+                  <label for="option_all">Select All</label>
+                  <a class="clear-selections">Clear selections</a>
+                </div>
+                <ul class="filter-options-list">
+                  <li class="filter-options-item">
+                    <div class="rue-checkbox">
+                      <input type="checkbox" id="option_opt_size_0" />
+                      <label for="option_opt_size_0"></label>
+                    </div>
+                    <label for="option_opt_size_0">Дні</label>
+                  </li>
+                  <li class="filter-options-item">
+                    <div class="rue-checkbox">
+                      <input type="checkbox" id="option_opt_size_1" />
+                      <label for="option_opt_size_1"></label>
+                    </div>
+                    <label for="option_opt_size_1">Години</label>
+                  </li>
+                  <li class="filter-options-item">
+                    <div class="rue-checkbox">
+                      <input type="checkbox" id="option_opt_size_1" />
+                      <label for="option_opt_size_1"></label>
+                    </div>
+                    <label for="option_opt_size_1">Хвилини</label>
+                  </li>
+                  <li class="filter-options-item">
+                    <div class="rue-checkbox">
+                      <input type="checkbox" id="option_opt_size_1" />
+                      <label for="option_opt_size_1"></label>
+                    </div>
+                    <label for="option_opt_size_1">Секунди</label>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
 
-
-
-
-      <div class="date-picker">
-
-        <!-- <label for="startDate">З:</label>
+        <div class="date-picker">
+          <!-- <label for="startDate">З:</label>
         <input type="text" id="startDate" name="startDate" readonly />
         <label for="endDate">По:</label>
         <input type="text" id="endDate" name="endDate" readonly /> -->
 
-
-
-
-
-
-         <label for="startDate">З:</label>
-        <input type="date" id="startDate" name="startDate" onchange="validateDates()" />
-        <label for="endDate">По:</label>
-        <input type="date" id="endDate" name="endDate" onchange="validateDates()" disabled /> 
+          <label for="startDate">З:</label>
+          <input
+            type="date"
+            id="startDate"
+            name="startDate"
+            onchange="validateDates()"
+          />
+          <label for="endDate">По:</label>
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            onchange="validateDates()"
+            disabled
+          />
+        </div>
+        <div class="radio-options">
+          <label
+            ><input type="radio" name="days" value="all" disabled /> Всі
+            дні</label
+          >
+          <label
+            ><input type="radio" name="days" value="weekdays" disabled /> Будні
+            дні</label
+          >
+          <label
+            ><input type="radio" name="days" value="weekends" disabled />
+            Вихідні дні</label
+          >
+        </div>
+        <div class="options">
+          <button id="week" onclick="setPeriod('week')" disabled>
+            Тиждень
+          </button>
+          <button id="month" onclick="setPeriod('month')" disabled>
+            Місяць
+          </button>
+          <button id="calculateDays" onclick="calculate('days')" disabled>
+            Порахувати кількість днів
+          </button>
+          <button id="calculateHours" onclick="calculate('hours')" disabled>
+            Порахувати кількість годин
+          </button>
+          <button id="calculateMinutes" onclick="calculate('minutes')" disabled>
+            Порахувати кількість хвилин
+          </button>
+          <button id="calculateSeconds" onclick="calculate('seconds')" disabled>
+            Порахувати кількість секунд
+          </button>
+          <!-- <button id="calculateDays" onclick="calculate('days')" disabled>Порахувати кількість днів</button> -->
+        </div>
       </div>
-      <div class="radio-options">
-        <label><input type="radio" name="days" value="all" disabled /> Всі дні</label>
-        <label><input type="radio" name="days" value="weekdays" disabled /> Будні дні</label>
-        <label><input type="radio" name="days" value="weekends" disabled /> Вихідні дні</label>
-      </div>
-      <div class="options">
-        <button id="week" onclick="setPeriod('week')" disabled>Тиждень</button>
-        <button id="month" onclick="setPeriod('month')" disabled>Місяць</button>
-        <button id="calculateDays" onclick="calculate('days')" disabled>Порахувати кількість днів</button>
-        <button id="calculateHours" onclick="calculate('hours')" disabled>Порахувати кількість годин</button>
-        <button id="calculateMinutes" onclick="calculate('minutes')" disabled>Порахувати кількість хвилин</button>
-        <button id="calculateSeconds" onclick="calculate('seconds')" disabled>Порахувати кількість секунд</button>
-        <!-- <button id="calculateDays" onclick="calculate('days')" disabled>Порахувати кількість днів</button> -->
-      </div>
+      <div id="window2" class="window">Window 2</div>
     </div>
-    <div id="window2" class="window">Window 2</div>
-  </div>
-  <div class="circles">
-    <div class="circle active" onclick="switchWindow(1)"></div>
-    <div class="circle" onclick="switchWindow(2)"></div>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-  <script src="script.js"></script>
-</body>
-
+    <div class="circles">
+      <div class="circle active" onclick="switchWindow(1)"></div>
+      <div class="circle" onclick="switchWindow(2)"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>

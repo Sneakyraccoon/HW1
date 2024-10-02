@@ -29,6 +29,19 @@ function switchWindow(windowNumber) {
   }, 100); // Задержка для плавного перехода
 }
 
+
+function toggleFilter(element) {
+  const filterGroup = element.parentElement;
+  const filterOptions = filterGroup.querySelector('.filter-options');
+
+  // Переключение класса "active" для списка опций
+  if (filterOptions.style.display === "block") {
+      filterOptions.style.display = "none"; // Закрыть
+  } else {
+      filterOptions.style.display = "block"; // Открыть
+  }
+}
+
 function validateDates() {
   const startDateInput = document.getElementById("startDate");
   const endDateInput = document.getElementById("endDate");
@@ -163,9 +176,6 @@ $(function () {
           }).appendTo(buttonPane);
         }
       }, 1);
-    },
-    onClose: function (dateText, inst) {
-      validateDates();  // Обновление полей и проверка дат
     }
   });
 });
