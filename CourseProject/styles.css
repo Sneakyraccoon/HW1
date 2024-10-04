@@ -19,7 +19,7 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 50px; /* Устанавливаем отступ сверху */
-  left: 50px; /* Устанавливаем отступ слева */
+  left: 50px;  
   display: none;
   justify-content: center;
   align-items: center;
@@ -34,6 +34,12 @@ body {
   display: flex;
   opacity: 1;
   transform: scale(1); /* Убираем смещение по оси X */
+}
+
+#newWindow.active {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
 }
 
 .date-picker {
@@ -245,6 +251,13 @@ body {
 .dropdown-content input[type="checkbox"] {
   margin-right: 10px;
 }
+
+
+.dropbtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 
 
 /* Стили для кнопки с иконкой корзины */

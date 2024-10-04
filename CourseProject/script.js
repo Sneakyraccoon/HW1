@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   const startDateInput = document.getElementById("startDate");
   const endDateInput = document.getElementById("endDate");
+  const daysCheckboxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]:not([id^="extraOption"])');
+  const unitsCheckboxes = document.querySelectorAll('.dropdown-content input[id^="extraOption"]');
 
   // Восстанавливаем значения из localStorage
   if (localStorage.getItem("startDate")) {
@@ -14,18 +16,85 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   validateDates();
+
+    // Добавляем обработчики событий для чекбоксов Days и Units
+    daysCheckboxes.forEach((checkbox) => {
+      checkbox.addEventListener('change', checkAllConditions);
+    });
+  
+    unitsCheckboxes.forEach((checkbox) => {
+      checkbox.addEventListener('change', checkAllConditions);
+    });
 });
 
+// Проверка всех условий для создания нового окна
+function checkAllConditions() {
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+  const daysChecked = document.querySelectorAll('.dropdown-content input[type="checkbox"]:not([id^="extraOption"]):checked').length > 0;
+  const unitsChecked = document.querySelectorAll('.dropdown-content input[id^="extraOption"]:checked').length > 0;
+
+  if (startDate && endDate && daysChecked && unitsChecked) {
+    createNewWindow();
+  }
+}
+
+// Создание нового окна справа от Window1
+function createNewWindow() {
+  // Проверяем, существует ли уже новое окно, чтобы не создавать повторно
+  if (document.getElementById('newWindow')) return;
+
+  // Создаем новый элемент для окна
+  const newWindow = document.createElement('div');
+  newWindow.id = 'newWindow';
+  newWindow.classList.add('window');
+  newWindow.innerHTML = '<p>New Window</p>';
+
+  // Добавляем новое окно в контейнер
+  const container = document.querySelector('.container');
+  container.appendChild(newWindow);
+
+  // Применяем стили для нового окна
+  newWindow.style.position = 'absolute';
+  newWindow.style.left = '60vw'; // Справа от Window1
+  newWindow.style.top = '50px'; // Тот же отступ сверху, что и у Window1
+  newWindow.style.width = '50vw'; // Тот же размер по ширине
+  newWindow.style.height = '50vh'; // Тот же размер по высоте
+  newWindow.style.border = '2px solid #4caf50';
+  newWindow.style.borderRadius = '10px';
+  newWindow.style.backgroundColor = '#fff';
+  newWindow.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+  newWindow.style.display = 'flex';
+  newWindow.style.justifyContent = 'center';
+  newWindow.style.alignItems = 'center';
+  newWindow.style.fontSize = '1.5em';
+  newWindow.style.color = '#333';
+  newWindow.style.opacity = '1';
+  newWindow.style.transform = 'scale(1)';
+}
+
 function switchWindow(windowNumber) {
+  // Переключаем только между Window1 и Window2
   document.querySelectorAll(".window").forEach((window, index) => {
-    window.classList.remove("active");
-    document.querySelectorAll(".circle")[index].classList.remove("active");
+    if (index < 2) { // Учитываем только первые два окна (Window1 и Window2)
+      window.classList.remove("active");
+      document.querySelectorAll(".circle")[index].classList.remove("active");
+    }
   });
+
   setTimeout(() => {
     document.getElementById(`window${windowNumber}`).classList.add("active");
-    document
-      .querySelectorAll(".circle")
-      [windowNumber - 1].classList.add("active");
+    document.querySelectorAll(".circle")[windowNumber - 1].classList.add("active");
+
+    // Управляем видимостью newWindow
+    const newWindow = document.getElementById('newWindow');
+    if (newWindow) {
+      if (windowNumber === 1) {
+        newWindow.style.display = 'flex'; // Показываем newWindow, если активно Window1
+      } else {
+        newWindow.style.display = 'none'; // Скрываем newWindow, если активно Window2
+      }
+    }
   }, 100); // Задержка для плавного перехода
 }
 
@@ -299,4 +368,10 @@ document.getElementById("resetButton").addEventListener("click", function () {
   document.querySelectorAll(".options button").forEach(button => {
     button.classList.remove("active");
   });
+
+    // Удаляем newWindow, если оно существует
+    const newWindow = document.getElementById('newWindow');
+    if (newWindow) {
+      newWindow.remove(); // Удаляем элемент newWindow из DOM
+    }
 });
