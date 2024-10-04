@@ -47,7 +47,12 @@ function validateDates() {
   const endDateInput = document.getElementById("endDate");
   const weekButton = document.getElementById("week");
   const monthButton = document.getElementById("month");
+  // Выбираем кнопки Days и Units по id
+  const daysButton = document.getElementById('daysButton');
+  const unitsButton = document.getElementById('unitsButton');
+
   const radioButtons = document.querySelectorAll(".radio-options input");
+
   const startDate = startDateInput.value;
   const endDate = endDateInput.value;
 
@@ -83,9 +88,69 @@ function validateDates() {
   } else {
     radioButtons.forEach((button) => (button.disabled = true));
   }
+
+    // Активируем или деактивируем кнопки "Days" и "Units"
+    if (startDate && endDate) {
+      daysButton.disabled = false;
+      unitsButton.disabled = false;
+    } else {
+      daysButton.disabled = true;
+      unitsButton.disabled = true;
+    }
 }
 
+// function setPeriod(period) {
+//   const startDate = new Date(localStorage.getItem("startDate"));
+//   let start, end;
+
+//   // Удаляем активный класс со всех кнопок
+//   document.querySelectorAll(".options button").forEach(button => {
+//     button.classList.remove("active");
+//   });
+
+//   // Добавляем активный класс к нажатой кнопке
+//   if (period === "week") {
+//     document.getElementById("week").classList.add("active");
+//     // Определяем первый день недели (понедельник)
+//     const firstDayOfWeek = new Date(startDate);
+//     firstDayOfWeek.setDate(startDate.getDate() - startDate.getDay() + 1);
+
+//     // Если startDate - последний день недели (воскресенье), устанавливаем startDate на предыдущий понедельник
+//     if (startDate.getDay() === 0) {
+//       start = new Date(startDate);
+//       start.setDate(startDate.getDate() - 6);
+//     } else {
+//       start = firstDayOfWeek;
+//     }
+
+//     end = new Date(start);
+//     end.setDate(start.getDate() + 6);
+//   } else if (period === "month") {
+//     document.getElementById("month").classList.add("active");
+//     start = new Date(startDate.getFullYear(), startDate.getMonth(), 2);
+//     end = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 1);
+//   }
+
+//   document.getElementById("startDate").value = start.toISOString().split("T")[0];
+//   document.getElementById("endDate").value = end.toISOString().split("T")[0];
+// }
+
 function setPeriod(period) {
+
+  const weekButton = document.getElementById("week");
+  const monthButton = document.getElementById("month");
+
+  // Сбрасываем активное состояние на обеих кнопках
+  weekButton.classList.remove("active");
+  monthButton.classList.remove("active");
+
+    // Активируем нажатую кнопку
+    if (period === "week") {
+      weekButton.classList.add("active");
+    } else if (period === "month") {
+      monthButton.classList.add("active");
+    }
+
   const startDate = new Date(localStorage.getItem("startDate"));
   let start, end;
 
@@ -96,7 +161,7 @@ function setPeriod(period) {
 
   // Добавляем активный класс к нажатой кнопке
   if (period === "week") {
-    document.getElementById("week").classList.add("active");
+
     // Определяем первый день недели (понедельник)
     const firstDayOfWeek = new Date(startDate);
     firstDayOfWeek.setDate(startDate.getDate() - startDate.getDay() + 1);
@@ -112,14 +177,24 @@ function setPeriod(period) {
     end = new Date(start);
     end.setDate(start.getDate() + 6);
   } else if (period === "month") {
-    document.getElementById("month").classList.add("active");
+
     start = new Date(startDate.getFullYear(), startDate.getMonth(), 2);
     end = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 1);
   }
 
   document.getElementById("startDate").value = start.toISOString().split("T")[0];
   document.getElementById("endDate").value = end.toISOString().split("T")[0];
+
+
+    // Обновляем localStorage
+    localStorage.setItem("startDate", start.toISOString().split("T")[0]);
+    localStorage.setItem("endDate", end.toISOString().split("T")[0]);
+  
+    // Вызываем validateDates для активации/деактивации кнопок
+    validateDates();
 }
+
+
 
 document.getElementById("startDate").addEventListener("change", function () {
   localStorage.setItem("startDate", this.value);
@@ -131,54 +206,14 @@ document.getElementById("endDate").addEventListener("change", function () {
 });
 
 
-$('#rangestart').calendar({
-  type: 'date',
-  endCalendar: $('#rangeend')
-});
-$('#rangeend').calendar({
-  type: 'date',
-  startCalendar: $('#rangestart')
-});
 
 
 
 
 
 
-$(function () {
-  $("#startDate, #endDate").datepicker({
-    showButtonPanel: true,  // Показывает стандартные кнопки (Clear и Today)
-    beforeShow: function (input, inst) {
-      // Добавляем кастомные кнопки после открытия календаря
-      setTimeout(function () {
-        var buttonPane = $(inst.dpDiv).find(".ui-datepicker-buttonpane");
 
-        // Удаляем, если кнопки уже добавлены, чтобы не дублировать
-        if (!buttonPane.find(".ui-datepicker-week").length) {
-          // Кнопка для выбора недели
-          $("<button>", {
-            text: "Week",
-            class: "ui-datepicker-week ui-state-default ui-priority-primary ui-corner-all",
-            click: function () {
-              selectWeek(input);  // Выбор недели
-            }
-          }).appendTo(buttonPane);
-        }
 
-        if (!buttonPane.find(".ui-datepicker-month").length) {
-          // Кнопка для выбора месяца
-          $("<button>", {
-            text: "Month",
-            class: "ui-datepicker-month ui-state-default ui-priority-primary ui-corner-all",
-            click: function () {
-              selectMonth(input);  // Выбор месяца
-            }
-          }).appendTo(buttonPane);
-        }
-      }, 1);
-    }
-  });
-});
 
 // Функция для выбора текущей недели
 function selectWeek(input) {
@@ -216,3 +251,52 @@ function selectMonth(input) {
   // Закрываем datepicker
   $(input).datepicker("hide");
 }
+
+
+
+
+
+
+
+
+
+
+document.getElementById("resetButton").addEventListener("click", function () {
+  // Очищаем поля дат
+  document.getElementById("startDate").value = "";
+  document.getElementById("endDate").value = "";
+  document.getElementById("endDate").disabled = true;
+
+  // Сбрасываем все чекбоксы
+  const checkboxes = document.querySelectorAll("#window1 input[type='checkbox']");
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+
+  // Очищаем localStorage
+  localStorage.clear();
+
+
+    // Деактивируем кнопки "Week" и "Month"
+    document.getElementById("week").disabled = true;
+    document.getElementById("month").disabled = true;
+  
+    // Убираем активные классы с кнопок "Week" и "Month"
+    document.getElementById("week").classList.remove("active");
+    document.getElementById("month").classList.remove("active");
+
+  // Деактивируем radio buttons, если есть
+  const radioButtons = document.querySelectorAll(".radio-options input");
+  radioButtons.forEach((button) => {
+    button.disabled = true;
+  });
+
+    // Деактивируем кнопки "Days" и "Units"
+    document.getElementById('daysButton').disabled = true;
+    document.getElementById('unitsButton').disabled = true;
+
+  // Сбрасываем активные классы на кнопках периода
+  document.querySelectorAll(".options button").forEach(button => {
+    button.classList.remove("active");
+  });
+});

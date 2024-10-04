@@ -10,10 +10,17 @@
   <body>
     <div class="container">
       <div id="window1" class="window active">
+<!-- 
+        <button id="resetButton" class="reset-btn">Reset</button> -->
+        <button id="resetButton" class="reset-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+        </svg>
+      </button>
 
         <div class="button-container">
         <div class="dropdown">
-          <button class="dropbtn">Days</button>
+          <button id="daysButton" class="dropbtn" disabled>Days</button>
           <div class="dropdown-content">
             <label><input type="checkbox" id="option1"> All days</label>
             <label><input type="checkbox" id="option2"> Weekdays</label>
@@ -22,7 +29,7 @@
         </div>
 
         <div class="dropdown">
-          <button class="dropbtn">Units</button>
+          <button id="unitsButton" class="dropbtn" disabled>Units</button>
           <div class="dropdown-content">
             <label><input type="checkbox" id="extraOption1"> Days</label>
             <label><input type="checkbox" id="extraOption2"> Hours</label>
@@ -48,6 +55,13 @@
             onchange="validateDates()"
             disabled
           />
+
+          <button id="week" class="date-button" onclick="setPeriod('week')" disabled>
+            Тиждень
+          </button>
+          <button id="month" class="date-button" onclick="setPeriod('month')" disabled>
+            Місяць
+          </button>
         </div>
         <!-- <div class="radio-options">
           <label
@@ -63,27 +77,15 @@
             Вихідні дні</label
           >
         </div> -->
-        <div class="options">
+        <!-- <div class="options">
           <button id="week" onclick="setPeriod('week')" disabled>
             Тиждень
           </button>
           <button id="month" onclick="setPeriod('month')" disabled>
             Місяць
           </button>
-          <button id="calculateDays" onclick="calculate('days')" disabled>
-            Порахувати кількість днів
-          </button>
-          <button id="calculateHours" onclick="calculate('hours')" disabled>
-            Порахувати кількість годин
-          </button>
-          <button id="calculateMinutes" onclick="calculate('minutes')" disabled>
-            Порахувати кількість хвилин
-          </button>
-          <button id="calculateSeconds" onclick="calculate('seconds')" disabled>
-            Порахувати кількість секунд
-          </button>
-          <!-- <button id="calculateDays" onclick="calculate('days')" disabled>Порахувати кількість днів</button> -->
-        </div>
+          
+        </div> -->
       </div>
       <div id="window2" class="window">Window 2</div>
     </div>
@@ -91,8 +93,6 @@
       <div class="circle active" onclick="switchWindow(1)"></div>
       <div class="circle" onclick="switchWindow(2)"></div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

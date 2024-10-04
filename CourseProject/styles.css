@@ -44,10 +44,69 @@ body {
   width: 100%; /* Добавлено для растягивания по ширине */
   flex-direction: row; /* Убедимся, что элементы располагаются в строку */
 }
-.date-picker label,
-.date-picker input {
-  width: auto; /* Добавлено для автоматической ширины */
+
+
+/* Стили для полей startDate и endDate */
+.date-picker input[type="date"] {
+  width: auto;  
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 2px solid #4caf50; /* Зеленая рамка для визуального акцента */
+  border-radius: 8px; /* Закругленные углы */
+  background-color: #f9f9f9; /* Легкий фон для улучшенной читаемости */
+  font-size: 16px;
+  color: #333;
+  outline: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для объема */
+  transition: border 0.3s ease, box-shadow 0.3s ease;
 }
+
+.date-picker input[type="date"]:hover {
+  border-color: #66bb6a; /* Изменение цвета рамки при наведении */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Более глубокая тень при наведении */
+}
+
+.date-picker input[type="date"]:focus {
+  border-color: #43a047; /* Яркий цвет рамки при фокусе */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Глубокая тень при фокусе */
+  background-color: #ffffff; /* Яркий фон при фокусе для выделения */
+}
+ 
+/* .date-picker input {
+  width: auto;  
+} */
+
+.date-picker label {
+  font-weight: bold;
+  font-size: 16px;
+  margin-right: 10px;
+  color: #4caf50; /* Цвет текста для меток */
+}
+
+.date-button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.date-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.date-button:hover:not(:disabled) {
+  background-color: #9578ad;
+}
+
+.date-button.active {
+  background-color: #a04598; /* Цвет кнопки при активном состоянии */
+}
+
 .circles {
   display: flex;
   justify-content: center;
@@ -186,3 +245,33 @@ body {
 .dropdown-content input[type="checkbox"] {
   margin-right: 10px;
 }
+
+
+/* Стили для кнопки с иконкой корзины */
+.reset-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent; /* Прозрачный фон */
+  border: none; /* Без рамки */
+  cursor: pointer;
+  padding: 5px;
+}
+
+.reset-btn svg {
+  fill: #000000; /* Черный цвет для иконки */
+  width: 32px; /* Увеличиваем размер до 32x32 для лучшей видимости */
+  height: 32px;
+  transition: transform 0.3s ease;
+}
+
+.reset-btn:hover svg {
+  transform: scale(1.1); /* Легкое увеличение при наведении */
+}
+
+.reset-btn:active svg {
+  transform: scale(0.95); /* Легкое уменьшение при нажатии */
+}
+
+
+
