@@ -34,25 +34,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 });
 
-// Проверка всех условий для создания нового окна
+// Тут ми перевіримо, чи всі умови виконані для того щоб створити додаткове вікно з результатами розрахунків
+// Необхідні умови:
+// 1. Заповнені поля startDate і endDate
+// 2. Обраний хочаб один тип дня
+// 3. Обраний хочаб одна одиниця вимірювання
 function checkAllConditions() {
+  console.log('check all cond accessed');
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
-  const daysChecked =
-    document.querySelectorAll(
-      '.dropdown-content input[type="checkbox"]:not([id^="extraOption"]):checked'
-    ).length > 0;
-  const unitsChecked =
-    document.querySelectorAll(
-      '.dropdown-content input[id^="extraOption"]:checked'
-    ).length > 0;
+  const daysChecked = document.querySelectorAll('#daysButton + .dropdown-content input[type="checkbox"]:checked').length > 0;
+  const unitsChecked = document.querySelectorAll('#unitsButton + .dropdown-content input[type="checkbox"]:checked').length > 0;
 
+  console.log( 'Умови для нового вінка:', startDate, endDate, daysChecked, unitsChecked);
+    
   if (startDate && endDate && daysChecked && unitsChecked) {
     createNewWindow();
   }
 }
 
-// Создание нового окна справа от Window1
+// Створюємо нове вікно, в якому ми бумо відображати результати розрахунків
 function createNewWindow() {
   // Проверяем, существует ли уже новое окно, чтобы не создавать повторно
   if (document.getElementById("newWindow")) return;
@@ -267,6 +268,7 @@ function setPeriod(period) {
       localStorage.setItem("startDate", start.toISOString().split("T")[0]);
       localStorage.setItem("endDate", end.toISOString().split("T")[0]);
   
+      checkAllConditions();
 }
 
 document.getElementById("startDate").addEventListener("change", function () {
@@ -307,11 +309,6 @@ document.getElementById("resetButton").addEventListener("click", function () {
   document.getElementById("week").classList.remove("active");
   document.getElementById("month").classList.remove("active");
 
-  // Деактивируем radio buttons, если есть
-  const radioButtons = document.querySelectorAll(".radio-options input");
-  radioButtons.forEach((button) => {
-    button.disabled = true;
-  });
 
   // Деактивируем кнопки "Days" и "Units"
   document.getElementById("daysButton").disabled = true;
@@ -328,3 +325,7 @@ document.getElementById("resetButton").addEventListener("click", function () {
     newWindow.remove(); // Удаляем элемент newWindow из DOM
   }
 });
+
+
+
+checkAllConditions();
