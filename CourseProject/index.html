@@ -22,19 +22,19 @@
         <div class="dropdown">
           <button id="daysButton" class="dropbtn" disabled>Days</button>
           <div class="dropdown-content">
-            <label><input type="checkbox" id="option1"> All days</label>
-            <label><input type="checkbox" id="option2"> Weekdays</label>
-            <label><input type="checkbox" id="option3"> Weekends</label>
+            <label><input type="checkbox" id="allDays"> All days</label>
+            <label><input type="checkbox" id="weekDays"> Weekdays</label>
+            <label><input type="checkbox" id="weekEnds"> Weekends</label>
           </div>
         </div>
 
         <div class="dropdown">
           <button id="unitsButton" class="dropbtn" disabled>Units</button>
           <div class="dropdown-content">
-            <label><input type="checkbox" id="extraOption1"> Days</label>
-            <label><input type="checkbox" id="extraOption2"> Hours</label>
-            <label><input type="checkbox" id="extraOption3"> Minutes</label>
-            <label><input type="checkbox" id="extraOption3"> Seconds</label>
+            <label><input type="checkbox" id="days"> Days</label>
+            <label><input type="checkbox" id="hours"> Hours</label>
+            <label><input type="checkbox" id="minutes"> Minutes</label>
+            <label><input type="checkbox" id="seconds"> Seconds</label>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
             id="startDate"
             name="startDate"
             onchange="validateDates()"
-          />
+          >
           <label for="endDate">По:</label>
           <input
             type="date"
@@ -54,7 +54,7 @@
             name="endDate"
             onchange="validateDates()"
             disabled
-          />
+          >
 
           <button id="week" class="date-button" onclick="setPeriod('week')" disabled>
             Тиждень
