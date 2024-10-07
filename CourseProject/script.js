@@ -106,6 +106,8 @@ function createNewWindow() {
   newWindow.style.color = "#333";
   newWindow.style.opacity = "1";
   newWindow.style.transform = "scale(1)";
+
+  updateNewWindow();
 }
 
 function switchWindow(windowNumber) {
@@ -286,6 +288,123 @@ function setPeriod(period) {
         validateDates();
   
 }
+
+
+
+
+function calculateDays(startDate, endDate) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const timeDiff = end.getTime() - start.getTime();
+  const totalDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  return totalDays;
+}
+
+function calculateWeekdays(startDate, endDate) {
+  let count = 0;
+  let currentDate = new Date(startDate);
+  const end = new Date(endDate);
+  
+  while (currentDate <= end) {
+      const day = currentDate.getDay();
+      if (day !== 0 && day !== 6) { // Будние дни (Пн-Пт)
+          count++;
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return count;
+}
+
+function calculateWeekends(startDate, endDate) {
+  let count = 0;
+  let currentDate = new Date(startDate);
+  const end = new Date(endDate);
+  
+  while (currentDate <= end) {
+      const day = currentDate.getDay();
+      if (day === 0 || day === 6) { // Выходные (Сб-Вс)
+          count++;
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return count;
+}
+
+
+// function updateNewWindow() {
+//   const startDate = document.getElementById("startDate").value;
+//   const endDate = document.getElementById("endDate").value;
+
+//   const allDaysChecked = document.getElementById("allDays").checked;
+//   const weekdaysChecked = document.getElementById("weekDays").checked;
+//   const weekendsChecked = document.getElementById("weekEnds").checked;
+
+//   let resultHTML = '<table class="result-table"><thead><tr><th>Тип дней</th><th>Количество</th></tr></thead><tbody>';
+
+//   if (allDaysChecked) {
+//     const totalDays = calculateDays(startDate, endDate);
+//     resultHTML += `<tr><td>Все дни</td><td>${totalDays}</td></tr>`;
+//   }
+
+//   if (weekdaysChecked) {
+//     const weekdays = calculateWeekdays(startDate, endDate);
+//     resultHTML += `<tr><td>Будние дни</td><td>${weekdays}</td></tr>`;
+//   }
+
+//   if (weekendsChecked) {
+//     const weekends = calculateWeekends(startDate, endDate);
+//     resultHTML += `<tr><td>Выходные дни</td><td>${weekends}</td></tr>`;
+//   }
+
+//   resultHTML += '</tbody></table>';
+
+//   const newWindow = document.getElementById("newWindow");
+//   if (newWindow) {
+//     newWindow.innerHTML = resultHTML;
+//   }
+// }
+
+
+
+function updateNewWindow() {
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+
+  const allDaysChecked = document.getElementById("allDays").checked;
+  const weekdaysChecked = document.getElementById("weekDays").checked;
+  const weekendsChecked = document.getElementById("weekEnds").checked;
+
+ // Добавляем заголовок с датами
+ let resultHTML = `<h2 class="result-title">С ${startDate} по ${endDate}:</h2><ul class="result-list">`;
+
+  if (allDaysChecked) {
+    const totalDays = calculateDays(startDate, endDate);
+    resultHTML += `<li><strong>Всего дней:</strong> ${totalDays}</li>`;
+  }
+
+  if (weekdaysChecked) {
+    const weekdays = calculateWeekdays(startDate, endDate);
+    resultHTML += `<li><strong>Будних дней:</strong> ${weekdays}</li>`;
+  }
+
+  if (weekendsChecked) {
+    const weekends = calculateWeekends(startDate, endDate);
+    resultHTML += `<li><strong>Выходных дней:</strong> ${weekends}</li>`;
+  }
+
+  resultHTML += '</ul>';
+
+  const newWindow = document.getElementById("newWindow");
+  if (newWindow) {
+    newWindow.innerHTML = resultHTML;
+  }
+}
+
+document.getElementById("allDays").addEventListener("change", updateNewWindow);
+document.getElementById("weekDays").addEventListener("change", updateNewWindow);
+document.getElementById("weekEnds").addEventListener("change", updateNewWindow);
+document.getElementById("startDate").addEventListener("change", updateNewWindow);
+document.getElementById("endDate").addEventListener("change", updateNewWindow);
 
 document.getElementById("startDate").addEventListener("change", function () {
    
