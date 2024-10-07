@@ -11,7 +11,8 @@ body {
 }
 
 .window {
-  width: 50vw; /* 50% от ширины окна браузера */
+  display: flex;
+  width: 25vw; /* 50% от ширины окна браузера */
   height: 50vh; /* 50% от высоты окна браузера */
   border: 2px solid #4caf50;
   border-radius: 10px;
@@ -47,10 +48,24 @@ body {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 100%; /* Добавлено для растягивания по ширине */
-  flex-direction: row; /* Убедимся, что элементы располагаются в строку */
+  width: 100%;
+  flex-direction: row;
 }
 
+/* .period-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px; 
+  gap: 10px; 
+} */
+
+.period-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px; /* Отступ сверху для кнопок */
+  width: 100%; /* Займем всю доступную ширину */
+  padding: 0 20px; /* Добавляем отступы слева и справа для всего контейнера кнопок */
+}
 
 /* Стили для полей startDate и endDate */
 .date-picker input[type="date"] {
@@ -89,9 +104,22 @@ body {
   color: #4caf50; /* Цвет текста для меток */
 }
 
-.date-button {
+/* .date-button {
   padding: 10px 20px;
-  margin: 0 5px;
+  margin: 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+} */
+
+
+.date-button {
+  flex-basis: calc(50% - 10px); /* Кнопки занимают половину доступного пространства с учётом отступа */
+  padding: 10px;
+  margin: 0 5px; /* Отступ между кнопками и по бокам */
   border: none;
   border-radius: 5px;
   background-color: #4caf50;
@@ -273,8 +301,8 @@ body {
 
 .reset-btn svg {
   fill: #000000; /* Черный цвет для иконки */
-  width: 32px; /* Увеличиваем размер до 32x32 для лучшей видимости */
-  height: 32px;
+  width: 24px; /* Увеличиваем размер до 32x32 для лучшей видимости */
+  height: 24px;
   transition: transform 0.3s ease;
 }
 
@@ -328,6 +356,8 @@ body {
   width: 80%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+
 
 .result-list li {
   font-size: 1.2em;

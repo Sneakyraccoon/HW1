@@ -45,24 +45,29 @@
             type="date"
             id="startDate"
             name="startDate"
-            onchange="validateDates()"
+            
           >
           <label for="endDate">По:</label>
           <input
             type="date"
             id="endDate"
             name="endDate"
-            onchange="validateDates()"
+            
             disabled
           >
 
-          <button id="week" class="date-button"  disabled>
+          <!-- <button id="week" class="date-button"  disabled>
             Тиждень
           </button>
           <button id="month" class="date-button"  disabled>
             Місяць
-          </button>
+          </button> -->
         </div>
+        <!-- Новый контейнер для кнопок -->
+<div class="period-buttons">
+  <button id="week" class="date-button" disabled>Тиждень</button>
+  <button id="month" class="date-button" disabled>Місяць</button>
+</div>
         <!-- <div class="radio-options">
           <label
             ><input type="radio" name="days" value="all" disabled /> Всі

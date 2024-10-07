@@ -91,9 +91,9 @@ function createNewWindow() {
 
   // Додаємо стилі до нового вікна
   newWindow.style.position = "absolute";
-  newWindow.style.left = "60vw"; // Справа от Window1
+  newWindow.style.left = "29vw"; // Справа от Window1
   newWindow.style.top = "50px"; // Тот же отступ сверху, что и у Window1
-  newWindow.style.width = "50vw"; // Тот же размер по ширине
+  newWindow.style.width = "25vw"; // Тот же размер по ширине
   newWindow.style.height = "50vh"; // Тот же размер по высоте
   newWindow.style.border = "2px solid #4caf50";
   newWindow.style.borderRadius = "10px";
@@ -331,39 +331,23 @@ function calculateWeekends(startDate, endDate) {
 }
 
 
-// function updateNewWindow() {
-//   const startDate = document.getElementById("startDate").value;
-//   const endDate = document.getElementById("endDate").value;
+function calculateHours(startDate, endDate) {
+  let count = 0;
 
-//   const allDaysChecked = document.getElementById("allDays").checked;
-//   const weekdaysChecked = document.getElementById("weekDays").checked;
-//   const weekendsChecked = document.getElementById("weekEnds").checked;
+  return count;
+}
 
-//   let resultHTML = '<table class="result-table"><thead><tr><th>Тип дней</th><th>Количество</th></tr></thead><tbody>';
+function calculateMinutes(startDate, endDate) {
+  let count = 0;
 
-//   if (allDaysChecked) {
-//     const totalDays = calculateDays(startDate, endDate);
-//     resultHTML += `<tr><td>Все дни</td><td>${totalDays}</td></tr>`;
-//   }
+  return count;
+}
 
-//   if (weekdaysChecked) {
-//     const weekdays = calculateWeekdays(startDate, endDate);
-//     resultHTML += `<tr><td>Будние дни</td><td>${weekdays}</td></tr>`;
-//   }
+function calculateSeconds(startDate, endDate) {
+  let count = 0;
 
-//   if (weekendsChecked) {
-//     const weekends = calculateWeekends(startDate, endDate);
-//     resultHTML += `<tr><td>Выходные дни</td><td>${weekends}</td></tr>`;
-//   }
-
-//   resultHTML += '</tbody></table>';
-
-//   const newWindow = document.getElementById("newWindow");
-//   if (newWindow) {
-//     newWindow.innerHTML = resultHTML;
-//   }
-// }
-
+  return count;
+}
 
 
 function updateNewWindow() {
@@ -374,14 +358,29 @@ function updateNewWindow() {
   const weekdaysChecked = document.getElementById("weekDays").checked;
   const weekendsChecked = document.getElementById("weekEnds").checked;
 
+  const unitDaysChecked = document.getElementById("days").checked;
+  const unitHoursChecked = document.getElementById("hours").checked;
+  const unitMinutesChecked = document.getElementById("minutes").checked;
+  const unitSecondsChecked = document.getElementById("seconds").checked;
+
  // Добавляем заголовок с датами
  let resultHTML = `<h2 class="result-title">С ${startDate} по ${endDate}:</h2><ul class="result-list">`;
 
-  if (allDaysChecked) {
-    const totalDays = calculateDays(startDate, endDate);
-    resultHTML += `<li><strong>Всего дней:</strong> ${totalDays}</li>`;
-  }
+ const units = [
+  { checked: unitDaysChecked, calculate: calculateDays, label: 'Calendar days' },
+  { checked: unitHoursChecked, calculate: calculateHours, label: 'Hours in calendar days' },
+  { checked: unitMinutesChecked, calculate: calculateMinutes, label: 'Minutes in calendar days' },
+  { checked: unitSecondsChecked, calculate: calculateSeconds, label: 'Seconds in calendar days' }
+];
 
+  if (allDaysChecked) {
+    units.forEach(unit => {
+      if (unit.checked) {
+        const totalValue = unit.calculate(startDate, endDate); // вызываем соответствующую функцию расчета
+        resultHTML += `<li> ${totalValue} <strong>${unit.label}</strong></li>`;
+      }
+    });
+  }
   if (weekdaysChecked) {
     const weekdays = calculateWeekdays(startDate, endDate);
     resultHTML += `<li><strong>Будних дней:</strong> ${weekdays}</li>`;
@@ -394,6 +393,8 @@ function updateNewWindow() {
 
   resultHTML += '</ul>';
 
+  console.log(resultHTML);
+
   const newWindow = document.getElementById("newWindow");
   if (newWindow) {
     newWindow.innerHTML = resultHTML;
@@ -403,11 +404,18 @@ function updateNewWindow() {
 document.getElementById("allDays").addEventListener("change", updateNewWindow);
 document.getElementById("weekDays").addEventListener("change", updateNewWindow);
 document.getElementById("weekEnds").addEventListener("change", updateNewWindow);
+
+document.getElementById("days").addEventListener("change", updateNewWindow);
+document.getElementById("hours").addEventListener("change", updateNewWindow);
+document.getElementById("minutes").addEventListener("change", updateNewWindow);
+document.getElementById("seconds").addEventListener("change", updateNewWindow);
+
 document.getElementById("startDate").addEventListener("change", updateNewWindow);
 document.getElementById("endDate").addEventListener("change", updateNewWindow);
 
+
 document.getElementById("startDate").addEventListener("change", function () {
-   
+  console.log('Попали в івентлисенер СтартДейт');
   localStorage.setItem("startDate", this.value);
   validateDates();
 });
@@ -421,22 +429,29 @@ document.getElementById("endDate").addEventListener("change", function () {
 document.getElementById("week").addEventListener("click", function() {
   console.log('попали в лисенер вик');
   setPeriod('week');
+  const newWindow = document.getElementById("newWindow");
+  if (newWindow && newWindow.style.display === "flex") {
+    updateNewWindow(); // Обновляем окно с результатами только если оно активно
+  }
 });
-
 
 
 document.getElementById("month").addEventListener("click", function() {
   console.log('попали в лисенер монс');
   setPeriod('month');
+  const newWindow = document.getElementById("newWindow");
+  if (newWindow && newWindow.style.display === "flex") {
+    updateNewWindow(); // Обновляем окно с результатами только если оно активно
+  }
 });
 
 document.getElementById("resetButton").addEventListener("click", function () {
-  // Очищаем поля дат
+  // Чистимо поля з датами
   document.getElementById("startDate").value = "";
   document.getElementById("endDate").value = "";
   document.getElementById("endDate").disabled = true;
 
-  // Сбрасываем все чекбоксы
+  // Чистимо всі чекбокси
   const checkboxes = document.querySelectorAll(
     "#window1 input[type='checkbox']"
   );
