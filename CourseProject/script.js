@@ -1,11 +1,17 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   const startDateInput = document.getElementById("startDate");
   const endDateInput = document.getElementById("endDate");
-  const daysCheckboxes = document.querySelectorAll(
-    '.dropdown-content input[type="checkbox"]:not([id^="extraOption"])'
-  );
+
+  const daysCheckboxes = document.querySelectorAll('#daysButton + .dropdown-content input[type="checkbox"]');
+  const unitsCheckboxes = document.querySelectorAll('#unitsButton + .dropdown-content input[type="checkbox"]');
+
   const unitsButton = document.getElementById("unitsButton");
   const daysButton = document.getElementById("daysButton");
+
+  const daysDropdownContent = daysButton.nextElementSibling;
+  const unitsDropdownContent = unitsButton.nextElementSibling;
+
+
 
   // Восстанавливаем значения из localStorage
   if (localStorage.getItem("startDate")) {
@@ -18,20 +24,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
     endDateInput.value = localStorage.getItem("endDate");
   }
 
-  validateDates();
 
   // Добавляем обработчики событий для чекбоксов Days
   daysCheckboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", function () {
-      // Проверяем, выбран ли хотя бы один чекбокс в Days
-      const isAnyDayChecked = Array.from(daysCheckboxes).some(
-        (cb) => cb.checked
-      );
-
-      // Активируем или деактивируем кнопку Units на основе выбора Days
-      unitsButton.disabled = !isAnyDayChecked;
+    checkbox.addEventListener("click", function () {
+      validateDates(); // Запуск функции при изменении чекбоксов Days
+      
     });
   });
+
+  // Добавляем обработчики событий для чекбоксов Units
+  unitsCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("click", function (event) {
+      if (unitsButton.disabled) {
+        event.preventDefault(); // Запрещаем действие, если кнопка Units не активна
+      
+      }
+      else{checkAllConditions();}
+    });
+  });
+
+
+  validateDates();
+  checkAllConditions();
+
 });
 
 // Тут ми перевіримо, чи всі умови виконані для того щоб створити додаткове вікно з результатами розрахунків
@@ -40,14 +56,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
 // 2. Обраний хочаб один тип дня
 // 3. Обраний хочаб одна одиниця вимірювання
 function checkAllConditions() {
-  console.log('check all cond accessed');
+  console.log('Попали в ЧекОлКондишнс');
+  // console.log("check all cond accessed");
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
-  const daysChecked = document.querySelectorAll('#daysButton + .dropdown-content input[type="checkbox"]:checked').length > 0;
-  const unitsChecked = document.querySelectorAll('#unitsButton + .dropdown-content input[type="checkbox"]:checked').length > 0;
+  const daysChecked =
+    document.querySelectorAll(
+      '#daysButton + .dropdown-content input[type="checkbox"]:checked'
+    ).length > 0;
+  const unitsChecked =
+    document.querySelectorAll(
+      '#unitsButton + .dropdown-content input[type="checkbox"]:checked'
+    ).length > 0;
 
-  console.log( 'Умови для нового вінка:', startDate, endDate, daysChecked, unitsChecked);
-    
   if (startDate && endDate && daysChecked && unitsChecked) {
     createNewWindow();
   }
@@ -55,20 +76,20 @@ function checkAllConditions() {
 
 // Створюємо нове вікно, в якому ми бумо відображати результати розрахунків
 function createNewWindow() {
-  // Проверяем, существует ли уже новое окно, чтобы не создавать повторно
+  // Перевіряємо, чи вікно вже створено
   if (document.getElementById("newWindow")) return;
 
-  // Создаем новый элемент для окна
+  // Створюємо новий елемент для вікна
   const newWindow = document.createElement("div");
   newWindow.id = "newWindow";
   newWindow.classList.add("window");
   newWindow.innerHTML = "<p>New Window</p>";
 
-  // Добавляем новое окно в контейнер
+  // Додаємо нове вікно до контейнеру
   const container = document.querySelector(".container");
   container.appendChild(newWindow);
 
-  // Применяем стили для нового окна
+  // Додаємо стилі до нового вікна
   newWindow.style.position = "absolute";
   newWindow.style.left = "60vw"; // Справа от Window1
   newWindow.style.top = "50px"; // Тот же отступ сверху, что и у Window1
@@ -115,37 +136,22 @@ function switchWindow(windowNumber) {
   }, 100); // Задержка для плавного перехода
 }
 
-function toggleFilter(element) {
-  const filterGroup = element.parentElement;
-  const filterOptions = filterGroup.querySelector(".filter-options");
-
-  // Переключение класса "active" для списка опций
-  if (filterOptions.style.display === "block") {
-    filterOptions.style.display = "none"; // Закрыть
-  } else {
-    filterOptions.style.display = "block"; // Открыть
-  }
-}
-
-
+// Знаходимо понеділок для опціїї Week
 function getMonday(date) {
-  // Создаем копию даты, чтобы не изменять исходную
+  // Створюємо копію вхідної дати, аби не змінювати оигінал
   const monday = new Date(date);
-
-  // Получаем текущий день недели (0 - воскресенье, 1 - понедельник, ..., 6 - суббота)
+  // Отримуємо день тижня (0 - неділя, 1 - понеділок, ..., 6 - субота )
   const day = monday.getDay();
-
-  // Если это воскресенье (day === 0), перемещаем на 6 дней назад, чтобы получить понедельник.
-  // В противном случае - просто смещаем на количество дней до понедельника.
+  // Якщо це неділя (day === 0), віднімаємо 6 днів для отримання понеділка
+  // інакше - зміщуємо на к=сть днів до понеділка
   const diff = (day === 0 ? -6 : 1) - day;
-
-  // Вычитаем разницу из даты
   monday.setDate(date.getDate() + diff);
-  
+
   return monday;
 }
 
 function validateDates() {
+  console.log('Попали в валидейтДейтс');
   const startDateInput = document.getElementById("startDate");
   const endDateInput = document.getElementById("endDate");
   const weekButton = document.getElementById("week");
@@ -154,10 +160,13 @@ function validateDates() {
   const daysButton = document.getElementById("daysButton");
   // const unitsButton = document.getElementById('unitsButton');
 
-  const radioButtons = document.querySelectorAll(".radio-options input");
-
   const startDate = startDateInput.value;
   const endDate = endDateInput.value;
+
+    // Проверяем наличие выбранных дней
+    const daysChecked = document.querySelectorAll(
+      '#daysButton + .dropdown-content input[type="checkbox"]:checked'
+    ).length > 0;
 
   if (startDate) {
     endDateInput.disabled = false;
@@ -185,39 +194,42 @@ function validateDates() {
     localStorage.removeItem("endDate");
   }
 
-
-
-  // Активируем или деактивируем кнопки "Days" и "Units"
+  console.log('Попали в валидейтДейтс - проверка дат');
+  // Активуємо/деактивуємо кнопку "Days"
   if (startDate && endDate) {
     daysButton.disabled = false;
-    unitsButton.disabled = false;
   } else {
     daysButton.disabled = true;
-    unitsButton.disabled = true;
   }
+
+    // Активация кнопки Units при выполнении условий
+    if (startDate && endDate && daysChecked) {
+      unitsButton.disabled = false;
+    } else {
+      unitsButton.disabled = true;
+    }
+
 }
 
-
-
-let initialStartDate = localStorage.getItem("initialStartDate") 
-  ? new Date(localStorage.getItem("initialStartDate")) 
+let initialStartDate = localStorage.getItem("initialStartDate")
+  ? new Date(localStorage.getItem("initialStartDate"))
   : null;
 
 document.getElementById("startDate").addEventListener("change", function () {
   localStorage.setItem("initialStartDate", this.value);
 
-    initialStartDate = new Date(this.value); // Тут зберігаємо першу дату 
-  
+  initialStartDate = new Date(this.value); // Тут зберігаємо першу дату
 });
 
 function setPeriod(period) {
   const weekButton = document.getElementById("week");
   const monthButton = document.getElementById("month");
 
-  // Сбрасываем активное состояние на обеих кнопках
+  console.log('попали в setPeriod');
+
+  // Знімаємо активний стан кнопок
   weekButton.classList.remove("active");
   monthButton.classList.remove("active");
-
 
   // Получаем стартовую дату из input или используем значение из localStorage
   let startDate = new Date(
@@ -228,7 +240,7 @@ function setPeriod(period) {
 
   // Инициализируем start и end как объекты Date
   let start = new Date(startDate); // Initialize with the startDate value
-  let end = new Date(startDate);   // Initialize similarly
+  let end = new Date(startDate); // Initialize similarly
 
   // Удаляем активный класс со всех кнопок
   document.querySelectorAll(".options button").forEach((button) => {
@@ -240,49 +252,64 @@ function setPeriod(period) {
     // Активуємо натисну кнопку
     weekButton.classList.add("active");
 
-     
     start = getMonday(initialStartDate);
     end = new Date(start);
     end.setDate(start.getDate() + 6);
-    
-
   } else if (period === "month") {
-        // Активуємо натисну кнопку
+    // Активуємо натисну кнопку
     monthButton.classList.add("active");
-// Дуууууже довго не міг зрозуміти чому в цьому рядку start повертає перший день місяця, а на екрані в startDate я бачу останній день попередньго місяця.
-// Гугл підказав додати до конструкції Date.UTC, бо це могло статися через часові пояси. Тепер все Ок.
-    start = new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth(), 1));
-    end = new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth() + 1, 0));
+    // Дуууууже довго не міг зрозуміти чому в цьому рядку start повертає перший день місяця, а на екрані в startDate я бачу останній день попередньго місяця.
+    // Гугл підказав додати до конструкції Date.UTC, бо це могло статися через часові пояси. Тепер все Ок.
+    start = new Date(
+      Date.UTC(startDate.getFullYear(), initialStartDate.getMonth(), 1)
+    );
+    end = new Date(
+      Date.UTC(startDate.getFullYear(), initialStartDate.getMonth() + 1, 0)
+    );
 
 
-    // Вызываем validateDates для активации/деактивации кнопок
-    validateDates();
   }
 
 
+
   // Тут оновимо значення на екрані в полях "startDate" і "endDate" на основі вирахуваних значень у змінних start і end
-  document.getElementById("startDate").value = start.toISOString().split("T")[0];
+  document.getElementById("startDate").value = start
+    .toISOString()
+    .split("T")[0];
   document.getElementById("endDate").value = end.toISOString().split("T")[0];
 
-      // Обновляем localStorage
-      localStorage.setItem("startDate", start.toISOString().split("T")[0]);
-      localStorage.setItem("endDate", end.toISOString().split("T")[0]);
+  // Обновляем localStorage
+  localStorage.setItem("startDate", start.toISOString().split("T")[0]);
+  localStorage.setItem("endDate", end.toISOString().split("T")[0]);
+
+        // Вызываем validateDates для активации/деактивации кнопок
+        validateDates();
   
-      checkAllConditions();
 }
 
 document.getElementById("startDate").addEventListener("change", function () {
+   
   localStorage.setItem("startDate", this.value);
   validateDates();
 });
 
 document.getElementById("endDate").addEventListener("change", function () {
+  console.log('Попали в івентлисенер ЕндДейт');
   localStorage.setItem("endDate", this.value);
+  validateDates();
+});
+
+document.getElementById("week").addEventListener("click", function() {
+  console.log('попали в лисенер вик');
+  setPeriod('week');
 });
 
 
 
-
+document.getElementById("month").addEventListener("click", function() {
+  console.log('попали в лисенер монс');
+  setPeriod('month');
+});
 
 document.getElementById("resetButton").addEventListener("click", function () {
   // Очищаем поля дат
@@ -309,7 +336,6 @@ document.getElementById("resetButton").addEventListener("click", function () {
   document.getElementById("week").classList.remove("active");
   document.getElementById("month").classList.remove("active");
 
-
   // Деактивируем кнопки "Days" и "Units"
   document.getElementById("daysButton").disabled = true;
   document.getElementById("unitsButton").disabled = true;
@@ -325,7 +351,5 @@ document.getElementById("resetButton").addEventListener("click", function () {
     newWindow.remove(); // Удаляем элемент newWindow из DOM
   }
 });
-
-
 
 checkAllConditions();
