@@ -5,94 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Журавльов О. Курсовий проект</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
     <div class="container">
       <div id="window1" class="window active">
-<!-- 
-        <button id="resetButton" class="reset-btn">Reset</button> -->
         <button id="resetButton" class="reset-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            fill="currentColor"
+            class="bi bi-trash-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"
+            />
+          </svg>
+        </button>
 
         <div class="button-container">
-        <div class="dropdown">
-          <button id="daysButton" class="dropbtn" disabled>Days</button>
-          <div class="dropdown-content">
-            <label><input type="checkbox" id="allDays"> All days</label>
-            <label><input type="checkbox" id="weekDays"> Weekdays</label>
-            <label><input type="checkbox" id="weekEnds"> Weekends</label>
+          <div class="dropdown">
+            <button id="daysButton" class="dropbtn" disabled>Days</button>
+            <div class="dropdown-content">
+              <label><input type="checkbox" id="allDays" /> All days</label>
+              <label><input type="checkbox" id="weekDays" /> Weekdays</label>
+              <label><input type="checkbox" id="weekEnds" /> Weekends</label>
+            </div>
           </div>
-        </div>
 
-        <div class="dropdown">
-          <button id="unitsButton" class="dropbtn" disabled>Units</button>
-          <div class="dropdown-content">
-            <label><input type="checkbox" id="days"> Days</label>
-            <label><input type="checkbox" id="hours"> Hours</label>
-            <label><input type="checkbox" id="minutes"> Minutes</label>
-            <label><input type="checkbox" id="seconds"> Seconds</label>
+          <div class="dropdown">
+            <button id="unitsButton" class="dropbtn" disabled>Units</button>
+            <div class="dropdown-content">
+              <label><input type="checkbox" id="days" /> Days</label>
+              <label><input type="checkbox" id="hours" /> Hours</label>
+              <label><input type="checkbox" id="minutes" /> Minutes</label>
+              <label><input type="checkbox" id="seconds" /> Seconds</label>
+            </div>
           </div>
         </div>
-      </div>
 
         <div class="date-picker">
           <label for="startDate">З:</label>
-          <input
-            type="date"
-            id="startDate"
-            name="startDate"
-            
-          >
+          <input type="date" id="startDate" name="startDate" />
           <label for="endDate">По:</label>
-          <input
-            type="date"
-            id="endDate"
-            name="endDate"
-            
-            disabled
-          >
-
-          <!-- <button id="week" class="date-button"  disabled>
-            Тиждень
-          </button>
-          <button id="month" class="date-button"  disabled>
-            Місяць
-          </button> -->
+          <input type="date" id="endDate" name="endDate" disabled />
         </div>
-        <!-- Новый контейнер для кнопок -->
-<div class="period-buttons">
-  <button id="week" class="date-button" disabled>Тиждень</button>
-  <button id="month" class="date-button" disabled>Місяць</button>
-</div>
-        <!-- <div class="radio-options">
-          <label
-            ><input type="radio" name="days" value="all" disabled /> Всі
-            дні</label
-          >
-          <label
-            ><input type="radio" name="days" value="weekdays" disabled /> Будні
-            дні</label
-          >
-          <label
-            ><input type="radio" name="days" value="weekends" disabled />
-            Вихідні дні</label
-          >
-        </div> -->
-        <!-- <div class="options">
-          <button id="week" onclick="setPeriod('week')" disabled>
-            Тиждень
-          </button>
-          <button id="month" onclick="setPeriod('month')" disabled>
-            Місяць
-          </button>
-          
-        </div> -->
+
+        <div class="period-buttons">
+          <button id="week" class="date-button" disabled>Тиждень</button>
+          <button id="month" class="date-button" disabled>Місяць</button>
+        </div>
       </div>
-      <div id="window2" class="window">Window 2</div>
+
+      <div id="window2" class="window">
+        <label for="countrySelect">Выберите страну:</label>
+        <select id="countrySelect">
+          <option value="">-- Выберите страну --</option>
+        </select>
+        <br /><br />
+        <label for="yearSelect">Выберите год:</label>
+        <select id="yearSelect" disabled>
+          <option value="">-- Выберите год --</option>
+        </select>
+        <br /><br />
+        <div id="holidaysTable"></div>
+      </div>
     </div>
     <div class="circles">
       <div class="circle active" onclick="switchWindow(1)"></div>

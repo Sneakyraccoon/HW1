@@ -12,14 +12,14 @@ body {
 
 .window {
   display: flex;
-  width: 25vw; /* 50% от ширины окна браузера */
-  height: 50vh; /* 50% от высоты окна браузера */
+  width: 25vw; 
+  height: 50vh; 
   border: 2px solid #4caf50;
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: absolute;
-  top: 50px; /* Устанавливаем отступ сверху */
+  top: 50px; 
   left: 50px;  
   display: none;
   justify-content: center;
@@ -28,13 +28,13 @@ body {
   color: #333;
   opacity: 0;
   transition: opacity 0.5s, transform 0.5s;
-  transform: scale(0.9); /* Убираем смещение по оси X */
+  transform: scale(0.9); 
   flex-direction: column;
 }
 .window.active {
   display: flex;
   opacity: 1;
-  transform: scale(1); /* Убираем смещение по оси X */
+  transform: scale(1); 
 }
 
 #newWindow.active {
@@ -62,35 +62,35 @@ body {
 .period-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px; /* Отступ сверху для кнопок */
-  width: 100%; /* Займем всю доступную ширину */
-  padding: 0 20px; /* Добавляем отступы слева и справа для всего контейнера кнопок */
+  margin-top: 15px; 
+  width: 100%; 
+  padding: 0 20px; 
 }
 
-/* Стили для полей startDate и endDate */
+/* Стилі startDate и endDate */
 .date-picker input[type="date"] {
   width: auto;  
   padding: 10px 15px;
   margin: 0 5px;
-  border: 2px solid #4caf50; /* Зеленая рамка для визуального акцента */
-  border-radius: 8px; /* Закругленные углы */
-  background-color: #f9f9f9; /* Легкий фон для улучшенной читаемости */
+  border: 2px solid #4caf50; 
+  border-radius: 8px; 
+  background-color: #f9f9f9; 
   font-size: 16px;
   color: #333;
   outline: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для объема */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .date-picker input[type="date"]:hover {
-  border-color: #66bb6a; /* Изменение цвета рамки при наведении */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Более глубокая тень при наведении */
+  border-color: #66bb6a; 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
 }
 
 .date-picker input[type="date"]:focus {
-  border-color: #43a047; /* Яркий цвет рамки при фокусе */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Глубокая тень при фокусе */
-  background-color: #ffffff; /* Яркий фон при фокусе для выделения */
+  border-color: #43a047; 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+  background-color: #ffffff; 
 }
  
 /* .date-picker input {
@@ -101,7 +101,7 @@ body {
   font-weight: bold;
   font-size: 16px;
   margin-right: 10px;
-  color: #4caf50; /* Цвет текста для меток */
+  color: #4caf50; 
 }
 
 /* .date-button {
@@ -117,9 +117,9 @@ body {
 
 
 .date-button {
-  flex-basis: calc(50% - 10px); /* Кнопки занимают половину доступного пространства с учётом отступа */
+  flex-basis: calc(50% - 10px); 
   padding: 10px;
-  margin: 0 5px; /* Отступ между кнопками и по бокам */
+  margin: 0 5px; 
   border: none;
   border-radius: 5px;
   background-color: #4caf50;
@@ -138,13 +138,13 @@ body {
 }
 
 .date-button.active {
-  background-color: #a04598; /* Цвет кнопки при активном состоянии */
+  background-color: #a04598; 
 }
 
 .circles {
   display: flex;
   justify-content: center;
-  margin-top: 60Vh; /* Отступ сверху для кружочков */
+  margin-top: 60Vh; 
 }
 .circle {
   width: 20px;
@@ -192,8 +192,9 @@ body {
   color: #ccc;
 }
 
+/* Колір активного стану кнопки */
 .options button.active {
-  background-color: #a04598; /* Цвет кнопки при активном состоянии */
+  background-color: #a04598; 
 }
 
 
@@ -213,20 +214,20 @@ body {
 
 
 
-/* Стили для обертки кнопок */
+/* Стилі для кнопок */
 .button-container {
   display: flex;
-  gap: 10px; /* Отступ между кнопками */
+  gap: 10px; 
   position: absolute;
   top: 10px;
   left: 10px;
 }
 
 
-/* Стили для дропдауна */
+/* Стиі для дропдауна */
 .dropdown {
  /* position: absolute; */
-  position: relative; /* Теперь относительно обертки */
+  position: relative; 
   top: 10px;
   left: 10px;
 }
@@ -260,7 +261,7 @@ body {
 
 .dropdown-content label {
   display: flex;
-  align-items: center; /* Выровняем чекбоксы и текст по вертикали */
+  align-items: center; 
   padding: 8px;
   color: black;
 }
@@ -288,30 +289,30 @@ body {
 
 
 
-/* Стили для кнопки с иконкой корзины */
+/* Стилі для іконки з корзиною */
 .reset-btn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: transparent; /* Прозрачный фон */
-  border: none; /* Без рамки */
+  background-color: transparent; 
+  border: none; 
   cursor: pointer;
   padding: 5px;
 }
 
 .reset-btn svg {
-  fill: #000000; /* Черный цвет для иконки */
-  width: 24px; /* Увеличиваем размер до 32x32 для лучшей видимости */
+  fill: #000000; 
+  width: 24px; 
   height: 24px;
   transition: transform 0.3s ease;
 }
 
 .reset-btn:hover svg {
-  transform: scale(1.1); /* Легкое увеличение при наведении */
+  transform: scale(1.1); 
 }
 
 .reset-btn:active svg {
-  transform: scale(0.95); /* Легкое уменьшение при нажатии */
+  transform: scale(0.95); 
 }
 
 
@@ -347,7 +348,7 @@ body {
 } */
 
 .result-list {
-  list-style-type: none; /* Убираем стандартные маркеры */
+  list-style-type: none; 
   padding: 20px;
   margin: 20px auto;
   background-color: #f9f9f9;
@@ -370,7 +371,7 @@ body {
 }
 
 .result-list li strong {
-  color: #4caf50; /* Цвет для выделения */
+  color: #4caf50; 
 }
 
 .result-list li:not(:last-child) {
@@ -380,3 +381,98 @@ body {
 .result-list li:hover {
   background-color: #e8f5e9;
 }
+
+
+
+
+/* Стилі для мобільних пристроїв */
+@media only screen and (max-width: 768px) {
+  .window {
+    width: 90vw; 
+    height: 40vh; 
+    left: 5vw; 
+    top: 20px; 
+  }
+
+  .container {
+    padding: 10px; 
+  }
+
+  .date-picker, .period-buttons {
+    flex-direction: column; 
+    gap: 5px; 
+  }
+
+  .dropbtn, .date-button {
+    font-size: 14px; 
+    padding: 8px; 
+  }
+
+  .circle {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+
+
+
+
+/* Window2 */
+
+
+/* #countrySelect, #yearSelect {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 2px solid #4caf50;
+  background-color: #f9f9f9;
+  color: #333;
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+#holidaysTable table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#holidaysTable th, #holidaysTable td {
+  border: 1px solid #4caf50;
+  padding: 10px;
+  text-align: left;
+}
+
+#holidaysTable th {
+  background-color: #4caf50;
+  color: white;
+}
+
+#holidaysTable td {
+  background-color: #f9f9f9;
+}
+
+#holidaysTable tr:hover {
+  background-color: #e8f5e9;
+}
+
+#window2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+#window2 label {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #4caf50;
+} */
+
