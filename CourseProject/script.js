@@ -292,11 +292,37 @@ function setPeriod(period) {
 
 
 
-function calculateDays(startDate, endDate) {
+function calculateDays(startDate, endDate, dayType) {
   const start = new Date(startDate);
   const end = new Date(endDate);
-  const timeDiff = end.getTime() - start.getTime();
-  const totalDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+  let totalDays = 0;
+
+  // Функція поверне ТРУ, якщо день є буднім (Пн-Пт) (Виклик ф-ції відбуденться нижче в else if (dayType === 'WK')
+  const isWeekday = (date) => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6; 
+  };
+
+  // Функція поверне ТРУ, якщо день є вихідним (Сб/Нд) (Виклик ф-ції відбуденться нижче в else if (dayType === 'WD')
+  const isWeekend = (date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
+    if (dayType === 'CD') {
+      // Тут просто підраховуємо всі дні без додаткових умов
+      totalDays++;
+    } else if (dayType === 'WK' && isWeekday(currentDate)) {
+      // Підраховуємо лише будні
+      totalDays++;
+    } else if (dayType === 'WD' && isWeekend(currentDate)) {
+      // Підраховуємо лише вихідні
+      totalDays++;
+    }
+  }
+
   return totalDays;
 }
 
@@ -331,22 +357,106 @@ function calculateWeekends(startDate, endDate) {
 }
 
 
-function calculateHours(startDate, endDate) {
-  let count = 0;
+function calculateHours(startDate, endDate, dayType) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
 
-  return count;
+  let totalHours = 0;
+
+  // Функция для проверки, является ли день будним
+  const isWeekday = (date) => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6; // 0 - воскресенье, 6 - суббота
+  };
+
+  // Функция для проверки, является ли день выходным
+  const isWeekend = (date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
+    if (dayType === 'CD') {
+      // Считаем все часы (24 часа за каждый день)
+      totalHours += 24;
+    } else if (dayType === 'WK' && isWeekday(currentDate)) {
+      // Считаем только часы будних дней (24 часа за каждый будний день)
+      totalHours += 24;
+    } else if (dayType === 'WD' && isWeekend(currentDate)) {
+      // Считаем только часы выходных дней (24 часа за каждый выходной день)
+      totalHours += 24;
+    }
+  }
+
+  return totalHours;
 }
 
-function calculateMinutes(startDate, endDate) {
-  let count = 0;
+function calculateMinutes(startDate, endDate, dayType) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
 
-  return count;
+  let totalMinutes = 0;
+
+  // Функция для проверки, является ли день будним
+  const isWeekday = (date) => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6; // 0 - воскресенье, 6 - суббота
+  };
+
+  // Функция для проверки, является ли день выходным
+  const isWeekend = (date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
+    if (dayType === 'CD') {
+      // Считаем все часы (24 часа за каждый день)
+      totalMinutes += 1440;
+    } else if (dayType === 'WK' && isWeekday(currentDate)) {
+      // Считаем только часы будних дней (24 часа за каждый будний день)
+      totalMinutes += 1440;
+    } else if (dayType === 'WD' && isWeekend(currentDate)) {
+      // Считаем только часы выходных дней (24 часа за каждый выходной день)
+      totalMinutes += 1440;
+    }
+  }
+
+  return totalMinutes;
 }
 
-function calculateSeconds(startDate, endDate) {
-  let count = 0;
+function calculateSeconds(startDate, endDate, dayType) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
 
-  return count;
+  let totalSeconds = 0;
+
+  // Функция для проверки, является ли день будним
+  const isWeekday = (date) => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6; // 0 - воскресенье, 6 - суббота
+  };
+
+  // Функция для проверки, является ли день выходным
+  const isWeekend = (date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
+    if (dayType === 'CD') {
+      // Считаем все часы (24 часа за каждый день)
+      totalSeconds += 86400;
+    } else if (dayType === 'WK' && isWeekday(currentDate)) {
+      // Считаем только часы будних дней (24 часа за каждый будний день)
+      totalSeconds += 86400;
+    } else if (dayType === 'WD' && isWeekend(currentDate)) {
+      // Считаем только часы выходных дней (24 часа за каждый выходной день)
+      totalSeconds += 86400;
+    }
+  }
+
+  return totalSeconds;
 }
 
 
@@ -367,33 +477,51 @@ function updateNewWindow() {
  let resultHTML = `<h2 class="result-title">С ${startDate} по ${endDate}:</h2><ul class="result-list">`;
 
  const units = [
-  { checked: unitDaysChecked, calculate: calculateDays, label: 'Calendar days' },
-  { checked: unitHoursChecked, calculate: calculateHours, label: 'Hours in calendar days' },
-  { checked: unitMinutesChecked, calculate: calculateMinutes, label: 'Minutes in calendar days' },
-  { checked: unitSecondsChecked, calculate: calculateSeconds, label: 'Seconds in calendar days' }
+  { checked: unitDaysChecked, calculate: calculateDays, label: 'days' },
+  { checked: unitHoursChecked, calculate: calculateHours, label: 'hours' },
+  { checked: unitMinutesChecked, calculate: calculateMinutes, label: 'minutes' },
+  { checked: unitSecondsChecked, calculate: calculateSeconds, label: 'seconds' }
 ];
 
   if (allDaysChecked) {
+    const dayType = 'CD';
     units.forEach(unit => {
       if (unit.checked) {
-        const totalValue = unit.calculate(startDate, endDate); // вызываем соответствующую функцию расчета
+        console.log('UNIT', unit);
+        const totalValue = unit.calculate(startDate, endDate, dayType); // вызываем соответствующую функцию расчета
         resultHTML += `<li> ${totalValue} <strong>${unit.label}</strong></li>`;
       }
     });
   }
+
+
+
   if (weekdaysChecked) {
-    const weekdays = calculateWeekdays(startDate, endDate);
-    resultHTML += `<li><strong>Будних дней:</strong> ${weekdays}</li>`;
+    const dayType = 'WK';
+    units.forEach(unit => {
+      if (unit.checked) {
+        console.log('UNIT', unit);
+        const totalValue = unit.calculate(startDate, endDate, dayType); // вызываем соответствующую функцию расчета
+        resultHTML += `<li> ${totalValue} <strong>${unit.label}</strong></li>`;
+      }
+    });
+
+
   }
 
   if (weekendsChecked) {
-    const weekends = calculateWeekends(startDate, endDate);
-    resultHTML += `<li><strong>Выходных дней:</strong> ${weekends}</li>`;
+    const dayType = 'WD';
+    units.forEach(unit => {
+      if (unit.checked) {
+        console.log('UNIT', unit);
+        const totalValue = unit.calculate(startDate, endDate, dayType); // вызываем соответствующую функцию расчета
+        resultHTML += `<li> ${totalValue} <strong>${unit.label}</strong></li>`;
+      }
+    });
   }
 
   resultHTML += '</ul>';
 
-  console.log(resultHTML);
 
   const newWindow = document.getElementById("newWindow");
   if (newWindow) {
