@@ -37,11 +37,49 @@ body {
   transform: scale(1); 
 }
 
+/* NEW WINDOW START */
+#newWindow {
+  position: absolute;
+  left: 29vw;
+  top: 50px;
+  width: 25vw;
+  height: 50vh;
+  border: 2px solid #4caf50;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  color: #333;
+  opacity: 1;
+  transform: scale(1);
+}
+
 #newWindow.active {
   display: flex;
   opacity: 1;
   transform: scale(1);
 }
+
+#newWindow ul.result-list {
+  font-size: 0.9em; /* Reduces the font size */
+  max-height: calc(100% - 40px); /* Adjusts to fit within newWindow's height */
+  overflow-y: auto; /* Adds vertical scrolling if content exceeds height */
+  padding: 10px;
+}
+
+#newWindow li {
+  line-height: 1.5; /* Space between lines to ensure readability */
+  margin-bottom: 8px; /* Space between list items */
+}
+
+#newWindow .result-title {
+  font-size: 1em; /* Slightly smaller title */
+}
+/* NEW WINDOW END */
+
 
 .date-picker {
   display: flex;
@@ -129,6 +167,18 @@ body {
 }
 
 .date-button:disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+
+
+.date-button:hover:not(:disabled) {
+  background-color: #9578ad;
+}
+
+.date-button:disabled:hover {
   background-color: #ccc;
   cursor: not-allowed;
 }
@@ -145,6 +195,7 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 60Vh; 
+  margin-left: -1320px; /* Сдвиг влево */
 }
 .circle {
   width: 20px;
@@ -287,6 +338,14 @@ body {
   cursor: not-allowed;
 }
 
+.dropbtn:disabled:hover {
+  background-color: #bbb;
+  cursor: not-allowed;
+}
+
+.dropbtn:disabled + .dropdown-content {
+  display: none;
+}
 
 
 /* Стилі для іконки з корзиною */

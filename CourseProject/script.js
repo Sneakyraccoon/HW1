@@ -1,12 +1,15 @@
-
 // WINDOW1
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
   const startDateInput = document.getElementById("startDate");
   const endDateInput = document.getElementById("endDate");
 
-  const daysCheckboxes = document.querySelectorAll('#daysButton + .dropdown-content input[type="checkbox"]');
-  const unitsCheckboxes = document.querySelectorAll('#unitsButton + .dropdown-content input[type="checkbox"]');
+  const daysCheckboxes = document.querySelectorAll(
+    '#daysButton + .dropdown-content input[type="checkbox"]'
+  );
+  const unitsCheckboxes = document.querySelectorAll(
+    '#unitsButton + .dropdown-content input[type="checkbox"]'
+  );
 
   const unitsButton = document.getElementById("unitsButton");
   const daysButton = document.getElementById("daysButton");
@@ -14,9 +17,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const daysDropdownContent = daysButton.nextElementSibling;
   const unitsDropdownContent = unitsButton.nextElementSibling;
 
-
-
-  // Відновлюємо значення - localStorage
+  // Відновлюємо значення з localStorage ====> START
   if (localStorage.getItem("startDate")) {
     startDateInput.value = localStorage.getItem("startDate");
     endDateInput.disabled = false;
@@ -27,30 +28,51 @@ document.addEventListener("DOMContentLoaded", (event) => {
     endDateInput.value = localStorage.getItem("endDate");
   }
 
+  // Восстанавливаем состояние чекбоксов days
+  daysCheckboxes.forEach((checkbox) => {
+    const checkboxId = checkbox.id;
+    if (localStorage.getItem(checkboxId) === "true") {
+      checkbox.checked = true;
+    }
+  });
+
+  // Восстанавливаем состояние чекбоксов units
+  unitsCheckboxes.forEach((checkbox) => {
+    const checkboxId = checkbox.id;
+    if (localStorage.getItem(checkboxId) === "true") {
+      checkbox.checked = true;
+    }
+  });
+
+    // Восстанавливаем состояние newWindow из localStorage
+    if (localStorage.getItem("newWindowActive")) {
+      createNewWindow();
+    }
+  // Відновлюємо значення з localStorage <==== END
 
   // Додамо івентлісенер для чекбоксів Days і повісимо на нього виклик перевірки дат при зміні чекбоксів
   daysCheckboxes.forEach((checkbox) => {
     checkbox.addEventListener("click", function () {
-      validateDates(); 
-      
+       validateDates();
+      // Сохраняем состояние чекбокса в localStorage
+      localStorage.setItem(checkbox.id, checkbox.checked);
     });
   });
 
-// Додамо івентлісенер для чекбоксів Units і повісимо на нього виклик перевірки дат при зміні чекбоксів
+  // Додамо івентлісенер для чекбоксів Units і повісимо на нього виклик перевірки дат при зміні чекбоксів
   unitsCheckboxes.forEach((checkbox) => {
     checkbox.addEventListener("click", function (event) {
       if (unitsButton.disabled) {
         event.preventDefault(); // Не виконуємо дій, якщо кнопка Units не активна ??????????
-      
-      }
-      else{checkAllConditions();} // Тут перевіряємо чи всі умови виконані для запуску додаткового вікна
+      } else {
+        checkAllConditions();
+      } // Тут перевіряємо чи всі умови виконані для запуску додаткового вікна
+      // Сохраняем состояние чекбокса в localStorage
+      localStorage.setItem(checkbox.id, checkbox.checked);
     });
   });
 
-
   validateDates();
-  checkAllConditions();
-
 });
 
 // Тут ми перевіримо, чи всі умови виконані для того щоб створити додаткове вікно з результатами розрахунків
@@ -59,7 +81,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 // 2. Обраний хочаб один тип дня
 // 3. Обраний хочаб одна одиниця вимірювання
 function checkAllConditions() {
-  console.log('Попали в ЧекОлКондишнс');
+  console.log("Попали в ЧекОлКондишнс");
   // console.log("check all cond accessed");
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
@@ -92,25 +114,12 @@ function createNewWindow() {
   const container = document.querySelector(".container");
   container.appendChild(newWindow);
 
-  // Додаємо стилі до нового вікна
-  newWindow.style.position = "absolute";
-  newWindow.style.left = "29vw"; // ліворуч від Window1
-  newWindow.style.top = "50px"; 
-  newWindow.style.width = "25vw"; 
-  newWindow.style.height = "50vh"; 
-  newWindow.style.border = "2px solid #4caf50";
-  newWindow.style.borderRadius = "10px";
-  newWindow.style.backgroundColor = "#fff";
-  newWindow.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
-  newWindow.style.display = "flex";
-  newWindow.style.justifyContent = "center";
-  newWindow.style.alignItems = "center";
-  newWindow.style.fontSize = "1.5em";
-  newWindow.style.color = "#333";
-  newWindow.style.opacity = "1";
-  newWindow.style.transform = "scale(1)";
+  newWindow.classList.add('newWindow');
 
   updateNewWindow();
+
+    // Сохраняем состояние в localStorage
+    localStorage.setItem("newWindowActive", "true");
 }
 
 // Перемикач між вікнами
@@ -124,7 +133,7 @@ function switchWindow(windowNumber) {
     }
   });
 
-  // Затримка перемикання 
+  // Затримка перемикання
   setTimeout(() => {
     document.getElementById(`window${windowNumber}`).classList.add("active");
     document
@@ -136,11 +145,13 @@ function switchWindow(windowNumber) {
     if (newWindow) {
       if (windowNumber === 1) {
         newWindow.style.display = "flex"; // Показуєм newWindow, якщо активно Window1
+        localStorage.setItem("newWindowActive", "true"); // Сохранение состояния
       } else {
         newWindow.style.display = "none"; // Ховаєм newWindow, якщо активно Window2
+        localStorage.setItem("newWindowActive", "false"); // Сохранение состояния
       }
     }
-  }, 100); // Затримка перемикання 
+  }, 100); // Затримка перемикання
 }
 
 // Знаходимо понеділок для опціїї Week
@@ -158,7 +169,7 @@ function getMonday(date) {
 }
 
 function validateDates() {
-  console.log('Попали в валидейтДейтс');
+  console.log("Попали в валидейтДейтс");
   const startDateInput = document.getElementById("startDate");
   const endDateInput = document.getElementById("endDate");
   const weekButton = document.getElementById("week");
@@ -170,8 +181,8 @@ function validateDates() {
   const startDate = startDateInput.value;
   const endDate = endDateInput.value;
 
- 
-    const daysChecked = document.querySelectorAll(
+  const daysChecked =
+    document.querySelectorAll(
       '#daysButton + .dropdown-content input[type="checkbox"]:checked'
     ).length > 0;
 
@@ -201,7 +212,7 @@ function validateDates() {
     localStorage.removeItem("endDate");
   }
 
-  console.log('Попали в валидейтДейтс - проверка дат');
+  console.log("Попали в валидейтДейтс - проверка дат");
   // Активуємо/деактивуємо кнопку "Days"
   if (startDate && endDate) {
     daysButton.disabled = false;
@@ -209,13 +220,12 @@ function validateDates() {
     daysButton.disabled = true;
   }
 
-    // Активация кнопки Units при выполнении условий
-    if (startDate && endDate && daysChecked) {
-      unitsButton.disabled = false;
-    } else {
-      unitsButton.disabled = true;
-    }
-
+  // Активация кнопки Units при выполнении условий
+  if (startDate && endDate && daysChecked) {
+    unitsButton.disabled = false;
+  } else {
+    unitsButton.disabled = true;
+  }
 }
 
 let initialStartDate = localStorage.getItem("initialStartDate")
@@ -238,7 +248,7 @@ function setPeriod(period) {
   const weekButton = document.getElementById("week");
   const monthButton = document.getElementById("month");
 
-  console.log('попали в setPeriod');
+  console.log("попали в setPeriod");
 
   // Знімаємо активний стан кнопок
   weekButton.classList.remove("active");
@@ -252,8 +262,8 @@ function setPeriod(period) {
   //  let start, end;
 
   // Це будуть проміжні дати початку і кінця, які ми використаємо для подрахунку тижня і місяця
-  let start = new Date(startDate); 
-  let end = new Date(startDate); 
+  let start = new Date(startDate);
+  let end = new Date(startDate);
 
   // Удаляем активный класс со всех кнопок
   document.querySelectorAll(".options button").forEach((button) => {
@@ -279,11 +289,7 @@ function setPeriod(period) {
     end = new Date(
       Date.UTC(startDate.getFullYear(), initialStartDate.getMonth() + 1, 0)
     );
-
-
   }
-
-
 
   // Тут оновимо значення на екрані в полях "startDate" і "endDate" на основі вирахуваних значень у змінних start і end
   document.getElementById("startDate").value = start
@@ -295,13 +301,9 @@ function setPeriod(period) {
   localStorage.setItem("startDate", start.toISOString().split("T")[0]);
   localStorage.setItem("endDate", end.toISOString().split("T")[0]);
 
-        // Вызываем validateDates для активации/деактивации кнопок
-        validateDates();
-  
+  // Вызываем validateDates для активации/деактивации кнопок
+  validateDates();
 }
-
-
-
 
 function calculateDays(startDate, endDate, dayType) {
   const start = new Date(startDate);
@@ -312,7 +314,7 @@ function calculateDays(startDate, endDate, dayType) {
   // Функція поверне ТРУ, якщо день є буднім (Пн-Пт) (Виклик ф-ції відбуденться нижче в else if (dayType === 'WK')
   const isWeekday = (date) => {
     const day = date.getDay();
-    return day !== 0 && day !== 6; 
+    return day !== 0 && day !== 6;
   };
 
   // Функція поверне ТРУ, якщо день є вихідним (Сб/Нд) (Виклик ф-ції відбуденться нижче в else if (dayType === 'WD')
@@ -321,14 +323,18 @@ function calculateDays(startDate, endDate, dayType) {
     return day === 0 || day === 6;
   };
 
-  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
-    if (dayType === 'CD') {
+  for (
+    let currentDate = new Date(start);
+    currentDate <= end;
+    currentDate.setDate(currentDate.getDate() + 1)
+  ) {
+    if (dayType === "CD") {
       // Тут просто підраховуємо всі дні без додаткових умов
       totalDays++;
-    } else if (dayType === 'WK' && isWeekday(currentDate)) {
+    } else if (dayType === "WK" && isWeekday(currentDate)) {
       // Підраховуємо лише будні
       totalDays++;
-    } else if (dayType === 'WD' && isWeekend(currentDate)) {
+    } else if (dayType === "WD" && isWeekend(currentDate)) {
       // Підраховуємо лише вихідні
       totalDays++;
     }
@@ -341,13 +347,14 @@ function calculateWeekdays(startDate, endDate) {
   let count = 0;
   let currentDate = new Date(startDate);
   const end = new Date(endDate);
-  
+
   while (currentDate <= end) {
-      const day = currentDate.getDay();
-      if (day !== 0 && day !== 6) { // Будние дни (Пн-Пт)
-          count++;
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
+    const day = currentDate.getDay();
+    if (day !== 0 && day !== 6) {
+      // Будние дни (Пн-Пт)
+      count++;
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
   }
   return count;
 }
@@ -356,17 +363,17 @@ function calculateWeekends(startDate, endDate) {
   let count = 0;
   let currentDate = new Date(startDate);
   const end = new Date(endDate);
-  
+
   while (currentDate <= end) {
-      const day = currentDate.getDay();
-      if (day === 0 || day === 6) { // Выходные (Сб-Вс)
-          count++;
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
+    const day = currentDate.getDay();
+    if (day === 0 || day === 6) {
+      // Выходные (Сб-Вс)
+      count++;
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
   }
   return count;
 }
-
 
 function calculateHours(startDate, endDate, dayType) {
   const start = new Date(startDate);
@@ -374,7 +381,7 @@ function calculateHours(startDate, endDate, dayType) {
 
   let totalHours = 0;
 
-  // Чи день будній? 
+  // Чи день будній?
   const isWeekday = (date) => {
     const day = date.getDay();
     return day !== 0 && day !== 6; // 0 - НД, 6 - СБ
@@ -386,14 +393,18 @@ function calculateHours(startDate, endDate, dayType) {
     return day === 0 || day === 6;
   };
 
-  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
-    if (dayType === 'CD') {
+  for (
+    let currentDate = new Date(start);
+    currentDate <= end;
+    currentDate.setDate(currentDate.getDate() + 1)
+  ) {
+    if (dayType === "CD") {
       // Рахуємо всі години (24 за кожен день)
       totalHours += 24;
-    } else if (dayType === 'WK' && isWeekday(currentDate)) {
+    } else if (dayType === "WK" && isWeekday(currentDate)) {
       // Рахуємо тільки години будніх днів (24 за кожен  будній день)
       totalHours += 24;
-    } else if (dayType === 'WD' && isWeekend(currentDate)) {
+    } else if (dayType === "WD" && isWeekend(currentDate)) {
       // Рахуємо тільки години вихідних днів (24 за кожен  вихідний день)
       totalHours += 24;
     }
@@ -408,7 +419,7 @@ function calculateMinutes(startDate, endDate, dayType) {
 
   let totalMinutes = 0;
 
-  // Чи день будній? 
+  // Чи день будній?
   const isWeekday = (date) => {
     const day = date.getDay();
     return day !== 0 && day !== 6; // 0 - НД, 6 - СБ
@@ -420,14 +431,18 @@ function calculateMinutes(startDate, endDate, dayType) {
     return day === 0 || day === 6;
   };
 
-  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
-    if (dayType === 'CD') {
+  for (
+    let currentDate = new Date(start);
+    currentDate <= end;
+    currentDate.setDate(currentDate.getDate() + 1)
+  ) {
+    if (dayType === "CD") {
       // Рахуємо всі години (24 за кожен день)
       totalMinutes += 1440;
-    } else if (dayType === 'WK' && isWeekday(currentDate)) {
+    } else if (dayType === "WK" && isWeekday(currentDate)) {
       // Рахуємо тільки години будніх днів (24 за кожен  будній день)
       totalMinutes += 1440;
-    } else if (dayType === 'WD' && isWeekend(currentDate)) {
+    } else if (dayType === "WD" && isWeekend(currentDate)) {
       // Рахуємо тільки години вихідних днів (24 за кожен  вихідний день)
       totalMinutes += 1440;
     }
@@ -442,34 +457,32 @@ function calculateSeconds(startDate, endDate, dayType) {
 
   let totalSeconds = 0;
 
-  
   const isWeekday = (date) => {
     const day = date.getDay();
-    return day !== 0 && day !== 6; 
+    return day !== 0 && day !== 6;
   };
 
-  
   const isWeekend = (date) => {
     const day = date.getDay();
     return day === 0 || day === 6;
   };
 
-  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
-    if (dayType === 'CD') {
-      
+  for (
+    let currentDate = new Date(start);
+    currentDate <= end;
+    currentDate.setDate(currentDate.getDate() + 1)
+  ) {
+    if (dayType === "CD") {
       totalSeconds += 86400;
-    } else if (dayType === 'WK' && isWeekday(currentDate)) {
-      
+    } else if (dayType === "WK" && isWeekday(currentDate)) {
       totalSeconds += 86400;
-    } else if (dayType === 'WD' && isWeekend(currentDate)) {
-      
+    } else if (dayType === "WD" && isWeekend(currentDate)) {
       totalSeconds += 86400;
     }
   }
 
   return totalSeconds;
 }
-
 
 function updateNewWindow() {
   const startDate = document.getElementById("startDate").value;
@@ -484,56 +497,59 @@ function updateNewWindow() {
   const unitMinutesChecked = document.getElementById("minutes").checked;
   const unitSecondsChecked = document.getElementById("seconds").checked;
 
- // Додаємо заголовок з датами
- let resultHTML = `<h2 class="result-title">С ${startDate} по ${endDate}:</h2><ul class="result-list">`;
+  // Додаємо заголовок з датами
+  let resultHTML = `<h2 class="result-title">Between ${startDate} and ${endDate}:</h2><ul class="result-list">`;
 
- // Зробим обєкт з одиницями вимірювання і їх відповідної функції розрахунку
- const units = [
-  { checked: unitDaysChecked, calculate: calculateDays, label: 'days' },
-  { checked: unitHoursChecked, calculate: calculateHours, label: 'hours' },
-  { checked: unitMinutesChecked, calculate: calculateMinutes, label: 'minutes' },
-  { checked: unitSecondsChecked, calculate: calculateSeconds, label: 'seconds' }
-];
+  // Зробим обєкт з одиницями вимірювання і їх відповідної функції розрахунку
+  const units = [
+    { checked: unitDaysChecked, calculate: calculateDays, label: "days" },
+    { checked: unitHoursChecked, calculate: calculateHours, label: "hours" },
+    {
+      checked: unitMinutesChecked,
+      calculate: calculateMinutes,
+      label: "minutes",
+    },
+    {
+      checked: unitSecondsChecked,
+      calculate: calculateSeconds,
+      label: "seconds",
+    },
+  ];
 
   if (allDaysChecked) {
-    const dayType = 'CD';
-    units.forEach(unit => {
+    const dayType = "CD";
+    units.forEach((unit) => {
       if (unit.checked) {
-        console.log('UNIT', unit);
-        const totalValue = unit.calculate(startDate, endDate, dayType); 
-        resultHTML += `<li> ${totalValue} <strong>${unit.label}</strong></li>`;
-      }
-    });
-  }
-
-
-
-  if (weekdaysChecked) {
-    const dayType = 'WK';
-    units.forEach(unit => {
-      if (unit.checked) {
-        console.log('UNIT', unit);
-        const totalValue = unit.calculate(startDate, endDate, dayType); 
-        resultHTML += `<li> ${totalValue} <strong>${unit.label}</strong></li>`;
-      }
-    });
-
-
-  }
-
-  if (weekendsChecked) {
-    const dayType = 'WD';
-    units.forEach(unit => {
-      if (unit.checked) {
-        console.log('UNIT', unit);
+        console.log("UNIT", unit);
         const totalValue = unit.calculate(startDate, endDate, dayType);
         resultHTML += `<li> ${totalValue} <strong>${unit.label}</strong></li>`;
       }
     });
   }
 
-  resultHTML += '</ul>';
+  if (weekdaysChecked) {
+    const dayType = "WK";
+    units.forEach((unit) => {
+      if (unit.checked) {
+        console.log("UNIT", unit);
+        const totalValue = unit.calculate(startDate, endDate, dayType);
+        resultHTML += `<li> ${totalValue} week<strong>${unit.label}</strong></li>`;
+      }
+    });
+  }
 
+  if (weekendsChecked) {
+    const dayType = "WD";
+    units.forEach((unit) => {
+      if (unit.checked) {
+        console.log("UNIT", unit);
+        const totalValue = unit.calculate(startDate, endDate, dayType);
+        resultHTML += `<li> ${totalValue} weekend<strong>${unit.label}</strong></li>`;
+      }
+    });
+  }
+
+  resultHTML += "</ul>";
 
   const newWindow = document.getElementById("newWindow");
   if (newWindow) {
@@ -550,35 +566,32 @@ document.getElementById("hours").addEventListener("change", updateNewWindow);
 document.getElementById("minutes").addEventListener("change", updateNewWindow);
 document.getElementById("seconds").addEventListener("change", updateNewWindow);
 
-document.getElementById("startDate").addEventListener("change", updateNewWindow);
-document.getElementById("endDate").addEventListener("change", updateNewWindow);
-
-
 document.getElementById("startDate").addEventListener("change", function () {
-  console.log('Попали в івентлисенер СтартДейт');
+  console.log("Попали в івентлисенер СтартДейт");
   localStorage.setItem("startDate", this.value);
   validateDates();
+  updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
 });
 
 document.getElementById("endDate").addEventListener("change", function () {
-  console.log('Попали в івентлисенер ЕндДейт');
+  console.log("Попали в івентлисенер ЕндДейт");
   localStorage.setItem("endDate", this.value);
   validateDates();
+  updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
 });
 
-document.getElementById("week").addEventListener("click", function() {
-  console.log('попали в лисенер вик');
-  setPeriod('week');
+document.getElementById("week").addEventListener("click", function () {
+  console.log("попали в лисенер вик");
+  setPeriod("week");
   const newWindow = document.getElementById("newWindow");
   if (newWindow && newWindow.style.display === "flex") {
     updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
   }
 });
 
-
-document.getElementById("month").addEventListener("click", function() {
-  console.log('попали в лисенер монс');
-  setPeriod('month');
+document.getElementById("month").addEventListener("click", function () {
+  console.log("попали в лисенер монс");
+  setPeriod("month");
   const newWindow = document.getElementById("newWindow");
   if (newWindow && newWindow.style.display === "flex") {
     updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
@@ -628,21 +641,17 @@ document.getElementById("resetButton").addEventListener("click", function () {
 
 checkAllConditions();
 
-
-
-
 // WINDOW2
-
 
 // API KEY: 'QBU9fmsfhOjN41RGVjOMuvSh86PP93Fk'
 
-const API_KEY = 'QBU9fmsfhOjN41RGVjOMuvSh86PP93Fk'; 
+const API_KEY = "Gr2z94IRJyzgU5JFjzGl1QStorZdpPit";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const countrySelect = document.getElementById("countrySelect");
   const yearSelect = document.getElementById("yearSelect");
 
-  // Нам трема створити опції по вибору років з 2001 по 2049. Зробимо це в лупі від 2001 до 20049 
+  // Нам трема створити опції по вибору років з 2001 по 2049. Зробимо це в лупі від 2001 до 20049
   // і за допомогою стандартного методу document.createElement додамо кожну опцію в HTML
   const currentYear = new Date().getFullYear();
   for (let year = 2001; year <= 2049; year++) {
@@ -656,18 +665,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Отримуємо список країн по АПІ
   async function fetchCountries() {
     try {
-      const response = await axios.get("https://calendarific.com/api/v2/countries", {
-        params: { api_key: API_KEY } 
-      });
+      const response = await axios.get(
+        "https://calendarific.com/api/v2/countries",
+        {
+          params: { api_key: API_KEY },
+        }
+      );
       const countries = response.data.response.countries;
-      countries.forEach(country => {
+      countries.forEach((country) => {
         const option = document.createElement("option");
         option.value = country["iso-3166"];
         option.textContent = country.country_name;
         countrySelect.appendChild(option);
       });
     } catch (error) {
-      document.getElementById("holidaysTable").innerHTML = "<p>Error loadind country list. Please try again later.</p>";
+      document.getElementById("holidaysTable").innerHTML =
+        "<p>Error loadind country list. Please try again later.</p>";
     }
   }
 
@@ -686,16 +699,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Тут отримаємо список свят
   async function fetchHolidays(countryCode, year) {
     try {
-      const response = await axios.get("https://calendarific.com/api/v2/holidays", {
-        params: {
-          api_key: API_KEY, 
-          country: countryCode,
-          year: year,
+      const response = await axios.get(
+        "https://calendarific.com/api/v2/holidays",
+        {
+          params: {
+            api_key: API_KEY,
+            country: countryCode,
+            year: year,
+          },
         }
-      });
+      );
       displayHolidays(response.data.response.holidays);
     } catch (error) {
-      document.getElementById("holidaysTable").innerHTML = "<p>Error loadind golidays. Please try again later.</p>";
+      document.getElementById("holidaysTable").innerHTML =
+        "<p>Error loadind golidays. Please try again later.</p>";
     }
   }
 
@@ -714,9 +731,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       </table>
     `;
     const tbody = holidaysTable.querySelector("tbody");
-    holidays.forEach(holiday => {
+    holidays.forEach((holiday) => {
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${new Date(holiday.date.iso).toLocaleDateString()}</td><td>${holiday.name}</td>`;
+      row.innerHTML = `<td>${new Date(
+        holiday.date.iso
+      ).toLocaleDateString()}</td><td>${holiday.name}</td>`;
       tbody.appendChild(row);
     });
 
@@ -729,7 +748,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const dateB = new Date(b.cells[0].textContent);
         return sortAsc ? dateA - dateB : dateB - dateA;
       });
-      rowsArray.forEach(row => tbody.appendChild(row));
+      rowsArray.forEach((row) => tbody.appendChild(row));
       sortAsc = !sortAsc;
     });
   }
@@ -747,4 +766,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
-
