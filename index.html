@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DateApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DateApp</h1>
+            <nav>
+                <a href="#" class="active">Periods</a>
+                <a href="#">Holidays</a>
+            </nav>
+        </header>
+
+        <section class="date-form">
+            <div class="form-group">
+                <label for="start-date">Start date:</label>
+                <input type="date" id="start-date" value="2025-03-11">
+            </div>
+
+            <div class="form-group">
+                <label for="end-date">End date:</label>
+                <input type="date" id="end-date" value="2025-05-19">
+            </div>
+
+            <div class="presets">
+                <button class="preset-btn">+ 7 days</button>
+                <button class="preset-btn">+ 30 days</button>
+            </div>
+
+            <div class="form-group">
+                <label>Days type:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="days-type" checked> All days</label>
+                    <label><input type="radio" name="days-type"> Week days</label>
+                    <label><input type="radio" name="days-type"> Weekend days</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Duration type:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="duration-type" checked> Days</label>
+                    <label><input type="radio" name="duration-type"> Hours</label>
+                    <label><input type="radio" name="duration-type"> Minutes</label>
+                    <label><input type="radio" name="duration-type"> Seconds</label>
+                </div>
+            </div>
+
+            <button class="submit-btn">Submit</button>
+        </section>
+
+        <section class="result">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3">No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>
