@@ -1,78 +1,249 @@
 // WINDOW1
 
+// Тут отримуємо значення  initialStartDate з localStorage
+// Його ми будемо використовувати для отримання Тижня і Місяця при натисканнях на кнопки Week і Month
+// Приклад -Ввели в поле старт -  02.10.2024 - це і буде initialStartDate
+// При натискання на кнопку ТИЖДЕЬ, отримаємо календанрий тиждень на екрані по значенню в initialStartDate , тобто:
+// Старт = 30.09.2024 - Енд = 06.10.2024
+// Тепер при натисканні на кнопку МІСЯЦЬ, отримаємо календарний місяць на основі initialStartDate , тобто:
+// startDate = 01.10.2024 - endDate = 31.10.2024
+// При ПОВТОРНОМУ натискання на кнопку ТИЖДЕЬ, отримаємо календанрий тиждень на екрані по значенню в initialStartDate , тобто:
+// ЗНОВУ startDate = 30.09.2024 - endDate = 06.10.2024
+
+let initialStartDate = localStorage.getItem("initialStartDate")
+  ? new Date(localStorage.getItem("initialStartDate"))
+  : null;
+
 document.addEventListener("DOMContentLoaded", () => {
   const startDateInput = document.getElementById("startDate");
   const endDateInput = document.getElementById("endDate");
 
-  const daysCheckboxes = document.querySelectorAll(
-    '#daysButton + .dropdown-content input[type="checkbox"]'
-  );
-  const unitsCheckboxes = document.querySelectorAll(
-    '#unitsButton + .dropdown-content input[type="checkbox"]'
-  );
+  const weekButton = document.getElementById("week");
+  const monthButton = document.getElementById("month");
 
   const unitsButton = document.getElementById("unitsButton");
   const daysButton = document.getElementById("daysButton");
 
-  const daysDropdownContent = daysButton.nextElementSibling;
-  const unitsDropdownContent = unitsButton.nextElementSibling;
-
-  // Відновлюємо значення з localStorage ====> START
   if (localStorage.getItem("startDate")) {
     startDateInput.value = localStorage.getItem("startDate");
     endDateInput.disabled = false;
     endDateInput.min = startDateInput.value;
+    weekButton.disabled = false;
+    monthButton.disabled = false;
   }
 
   if (localStorage.getItem("endDate")) {
     endDateInput.value = localStorage.getItem("endDate");
+    weekButton.disabled = false;
+    monthButton.disabled = false;
+  }
+  
+  if (localStorage.getItem("newWindowActive")) {
+    createNewWindow();
   }
 
-  // Восстанавливаем состояние чекбоксов days
-  daysCheckboxes.forEach((checkbox) => {
-    const checkboxId = checkbox.id;
-    if (localStorage.getItem(checkboxId) === "true") {
-      checkbox.checked = true;
+
+  const getCheckboxes = (buttonId) => {
+    return document.querySelectorAll(
+      `#${buttonId} + .dropdown-content input[type="checkbox"]`
+    );
+  };
+
+  const isChecked = (checkboxes) => {
+    return Array.from(checkboxes).some((checkbox) => checkbox.checked);
+  };
+
+  const daysCheckboxes = getCheckboxes("daysButton");
+  const unitsCheckboxes = getCheckboxes("unitsButton");
+
+
+    // Восстанавливаем состояние чекбоксов DAYS
+    daysCheckboxes.forEach((checkbox) => {
+      const checkboxId = checkbox.id;
+      if (localStorage.getItem(checkboxId) === "true") {
+        checkbox.checked = true;
+      }
+    });
+  
+    // // Восстанавливаем состояние чекбоксов UNITS
+    unitsCheckboxes.forEach((checkbox) => {
+      const checkboxId = checkbox.id;
+      if (localStorage.getItem(checkboxId) === "true") {
+        checkbox.checked = true;
+        unitsButton.disabled = false;
+      }
+    });
+  
+    // Восстанавливаем состояние кнопки Days
+    if (localStorage.getItem("daysButtonEnabled") === "true") {
+      daysButton.disabled = false;
+    }
+  
+    // // Восстанавливаем состояние кнопки Units
+    // if (localStorage.getItem("unitsButtonEnabled") === "true") {
+    //   unitsButton.disabled = false;
+    // }
+  
+   // Восстанавливаем состояние кнопок Week и Month
+    if (localStorage.getItem("weekActive") === "true") {
+      weekButton.classList.add("active");
+    }
+    if (localStorage.getItem("monthActive") === "true") {
+      monthButton.classList.add("active");
+    }
+
+  // Функция, которая обновляет состояние кнопки unitsButton
+  const updateUnitsButtonState = () => {
+    const daysChecked = isChecked(daysCheckboxes);
+    unitsButton.disabled = !daysChecked; // Активируем кнопку, если хоть один чекбокс отмечен
+  };
+
+  // Обновляем состояние кнопки unitsButton при загрузке страницы
+  updateUnitsButtonState();
+
+  // Функція, яка буде перевіряти стани всіх чекбоксів
+  const updateOnUnits = () => {
+    const daysChecked = isChecked(daysCheckboxes);
+    const unitsChecked = isChecked(unitsCheckboxes);
+    checkAllConditions(startDateInput, endDateInput, daysChecked, unitsChecked);
+  };
+
+  // Функция для обработки изменений дат
+  function handleDateChange(startDate, endDate) {
+    // Обработка startDate
+    if (startDate) {
+      // Сохраняем initialStartDate только если его еще не было установлено
+
+      endDateInput.disabled = false;
+      endDateInput.min = startDate;
+      weekButton.disabled = false;
+      monthButton.disabled = false;
+      localStorage.setItem("startDate", startDate);
+      
+
+    } else {
+      endDateInput.disabled = true;
+      endDateInput.value = "";
+      weekButton.disabled = true;
+      monthButton.disabled = true;
+      localStorage.removeItem("startDate");
+    }
+
+    // Обработка endDate
+    if (endDate) {
+      // Если стартовая дата больше конечной, очищаем endDate
+      if (new Date(startDate) > new Date(endDate)) {
+        endDateInput.value = "";
+        localStorage.removeItem("endDate");
+      } else {
+        localStorage.setItem("endDate", endDate);
+      }
+    } else {
+      localStorage.removeItem("endDate");
+    }
+
+    // Активуємо/деактивуємо кнопку "Days"
+    if (startDate && endDate) {
+      daysButton.disabled = false;
+      localStorage.setItem("daysButtonEnabled", "true");
+    } else {
+      daysButton.disabled = true;
+    }
+  }
+
+  startDateInput.addEventListener("change", function () {
+    localStorage.setItem("initialStartDate", this.value);
+    initialStartDate = new Date(this.value);
+
+    const startDate = this.value;
+    const endDate = endDateInput.value; // Получаем текущее значение endDate
+    handleDateChange(startDate, endDate); // Обрабатываем обе даты
+    updateNewWindow(); // Якщо змінили значення startDate, то перераховуємо дні/години/хвилини/секунди у новому вікні
+  });
+
+  // Обработка изменения конечной даты
+  endDateInput.addEventListener("change", function () {
+    const startDate = startDateInput.value; // Получаем текущее значение startDate
+    const endDate = this.value;
+    handleDateChange(startDate, endDate); // Обрабатываем обе даты
+  });
+
+
+
+
+
+  weekButton.addEventListener("click", function () {
+    setPeriod("week");
+    const newWindow = document.getElementById("newWindow");
+    if (newWindow && newWindow.style.display === "flex") {
+      updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
+    }
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value; // Получаем текущее значение endDate
+    handleDateChange(startDate, endDate); // Обрабатываем обе даты
+    updateNewWindow(); // Якщо змінили значення startDate, то перераховуємо дні/години/хвилини/секунди у новому вікні
+    localStorage.setItem("weekActive", "true"); // Save state to localStorage
+    localStorage.setItem("monthActive", "false");
+  });
+
+
+  document.getElementById("month").addEventListener("click", function () {
+    // console.log("попали в лисенер монс");
+    setPeriod("month");
+    const newWindow = document.getElementById("newWindow");
+    if (newWindow && newWindow.style.display === "flex") {
+      updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
     }
   });
 
-  // Восстанавливаем состояние чекбоксов units
-  unitsCheckboxes.forEach((checkbox) => {
-    const checkboxId = checkbox.id;
-    if (localStorage.getItem(checkboxId) === "true") {
-      checkbox.checked = true;
+
+  monthButton.addEventListener("click", function () {
+    setPeriod("month");
+    const newWindow = document.getElementById("newWindow");
+    if (newWindow && newWindow.style.display === "flex") {
+      updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
     }
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value; // Получаем текущее значение endDate
+    handleDateChange(startDate, endDate); // Обрабатываем обе даты
+    updateNewWindow(); // Якщо змінили значення startDate, то перераховуємо дні/години/хвилини/секунди у новому вікні
+    localStorage.setItem("monthActive", "true"); // Save state to localStorage
+    localStorage.setItem("weekActive", "false");
   });
 
-    // Восстанавливаем состояние newWindow из localStorage
-    if (localStorage.getItem("newWindowActive")) {
-      createNewWindow();
-    }
+  // Відновлюємо значення з localStorage ====> START
+
+
+  if (localStorage.getItem("newWindowActive")) {
+    createNewWindow();
+  }
+
   // Відновлюємо значення з localStorage <==== END
 
   // Додамо івентлісенер для чекбоксів Days і повісимо на нього виклик перевірки дат при зміні чекбоксів
   daysCheckboxes.forEach((checkbox) => {
     checkbox.addEventListener("click", function () {
-       validateDates();
+      updateNewWindow();
+      updateUnitsButtonState();
       // Сохраняем состояние чекбокса в localStorage
       localStorage.setItem(checkbox.id, checkbox.checked);
     });
+
   });
 
   // Додамо івентлісенер для чекбоксів Units і повісимо на нього виклик перевірки дат при зміні чекбоксів
   unitsCheckboxes.forEach((checkbox) => {
     checkbox.addEventListener("click", function (event) {
+        updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
       if (unitsButton.disabled) {
         event.preventDefault(); // Не виконуємо дій, якщо кнопка Units не активна ??????????
       } else {
-        checkAllConditions();
+        updateOnUnits();
       } // Тут перевіряємо чи всі умови виконані для запуску додаткового вікна
       // Сохраняем состояние чекбокса в localStorage
       localStorage.setItem(checkbox.id, checkbox.checked);
     });
   });
-
-  validateDates();
 });
 
 // Тут ми перевіримо, чи всі умови виконані для того щоб створити додаткове вікно з результатами розрахунків
@@ -80,19 +251,10 @@ document.addEventListener("DOMContentLoaded", () => {
 // 1. Заповнені поля startDate і endDate
 // 2. Обраний хочаб один тип дня
 // 3. Обраний хочаб одна одиниця вимірювання
-function checkAllConditions() {
-  console.log("Попали в ЧекОлКондишнс");
-  // console.log("check all cond accessed");
-  const startDate = document.getElementById("startDate").value;
-  const endDate = document.getElementById("endDate").value;
-  const daysChecked =
-    document.querySelectorAll(
-      '#daysButton + .dropdown-content input[type="checkbox"]:checked'
-    ).length > 0;
-  const unitsChecked =
-    document.querySelectorAll(
-      '#unitsButton + .dropdown-content input[type="checkbox"]:checked'
-    ).length > 0;
+function checkAllConditions( startDateInput, endDateInput, daysChecked, unitsChecked) 
+{
+  const startDate = startDateInput.value;
+  const endDate = endDateInput.value;
 
   if (startDate && endDate && daysChecked && unitsChecked) {
     createNewWindow();
@@ -114,16 +276,16 @@ function createNewWindow() {
   const container = document.querySelector(".container");
   container.appendChild(newWindow);
 
-  newWindow.classList.add('newWindow');
+  newWindow.classList.add("newWindow");
 
   updateNewWindow();
 
-    // Сохраняем состояние в localStorage
-    localStorage.setItem("newWindowActive", "true");
+  // Сохраняем состояние в localStorage
+  localStorage.setItem("newWindowActive", "true");
 }
 
 // Перемикач між вікнами
-function switchWindow(windowNumber) {
+async function switchWindow(windowNumber) {
   // перемикаємся тільки між Window1 і Window2
   document.querySelectorAll(".window").forEach((window, index) => {
     if (index < 2) {
@@ -134,7 +296,7 @@ function switchWindow(windowNumber) {
   });
 
   // Затримка перемикання
-  setTimeout(() => {
+  setTimeout(async() => {
     document.getElementById(`window${windowNumber}`).classList.add("active");
     document
       .querySelectorAll(".circle")
@@ -150,6 +312,14 @@ function switchWindow(windowNumber) {
         newWindow.style.display = "none"; // Ховаєм newWindow, якщо активно Window2
         localStorage.setItem("newWindowActive", "false"); // Сохранение состояния
       }
+    }
+    // Звертаємось до АРІ за списком країн лише коли активне вікно 2
+    if (windowNumber === 2 && !countrySelect.hasChildNodes()) {
+          
+    if (windowNumber === 2 && !countrySelect.hasChildNodes()) {
+     
+      await fetchCountries(); // Асинхронный запрос
+    }
     }
   }, 100); // Затримка перемикання
 }
@@ -168,76 +338,6 @@ function getMonday(date) {
   return monday;
 }
 
-function validateDates() {
-  console.log("Попали в валидейтДейтс");
-  const startDateInput = document.getElementById("startDate");
-  const endDateInput = document.getElementById("endDate");
-  const weekButton = document.getElementById("week");
-  const monthButton = document.getElementById("month");
-
-  const daysButton = document.getElementById("daysButton");
-  // const unitsButton = document.getElementById('unitsButton');
-
-  const startDate = startDateInput.value;
-  const endDate = endDateInput.value;
-
-  const daysChecked =
-    document.querySelectorAll(
-      '#daysButton + .dropdown-content input[type="checkbox"]:checked'
-    ).length > 0;
-
-  if (startDate) {
-    endDateInput.disabled = false;
-    endDateInput.min = startDate;
-    weekButton.disabled = false;
-    monthButton.disabled = false;
-    localStorage.setItem("startDate", startDate);
-  } else {
-    endDateInput.disabled = true;
-    endDateInput.value = "";
-    weekButton.disabled = true;
-    monthButton.disabled = true;
-    localStorage.removeItem("startDate");
-  }
-
-  if (endDate) {
-    // Якщо користувач обрав СтартДейт, яка є більшою за ЕндДейт, тоді очистимо поле ЕндДейт і приберемо його з локалсториджа
-    if (new Date(startDate) > new Date(endDate)) {
-      endDateInput.value = "";
-      localStorage.removeItem("endDate");
-    } else {
-      localStorage.setItem("endDate", endDate);
-    }
-  } else {
-    localStorage.removeItem("endDate");
-  }
-
-  console.log("Попали в валидейтДейтс - проверка дат");
-  // Активуємо/деактивуємо кнопку "Days"
-  if (startDate && endDate) {
-    daysButton.disabled = false;
-  } else {
-    daysButton.disabled = true;
-  }
-
-  // Активация кнопки Units при выполнении условий
-  if (startDate && endDate && daysChecked) {
-    unitsButton.disabled = false;
-  } else {
-    unitsButton.disabled = true;
-  }
-}
-
-let initialStartDate = localStorage.getItem("initialStartDate")
-  ? new Date(localStorage.getItem("initialStartDate"))
-  : null;
-
-document.getElementById("startDate").addEventListener("change", function () {
-  localStorage.setItem("initialStartDate", this.value);
-
-  initialStartDate = new Date(this.value); // Тут зберігаємо першу дату
-});
-
 // Особливості роботи кнопок WEEK і MONTH:
 // Коли користувач ввів вперше СтартДейт, то це значення запишеться в  localStorage як initialStartDate
 // Коли користувач буде натискати на WEEK і MONTH, саме initialStartDate буде використовуватись для підрахунку меж тижня і місяця
@@ -248,7 +348,7 @@ function setPeriod(period) {
   const weekButton = document.getElementById("week");
   const monthButton = document.getElementById("month");
 
-  console.log("попали в setPeriod");
+  //console.log("попали в setPeriod");
 
   // Знімаємо активний стан кнопок
   weekButton.classList.remove("active");
@@ -264,11 +364,6 @@ function setPeriod(period) {
   // Це будуть проміжні дати початку і кінця, які ми використаємо для подрахунку тижня і місяця
   let start = new Date(startDate);
   let end = new Date(startDate);
-
-  // Удаляем активный класс со всех кнопок
-  document.querySelectorAll(".options button").forEach((button) => {
-    button.classList.remove("active");
-  });
 
   // Активуємо кнопки
   if (period === "week") {
@@ -300,9 +395,6 @@ function setPeriod(period) {
   // Обновляем localStorage
   localStorage.setItem("startDate", start.toISOString().split("T")[0]);
   localStorage.setItem("endDate", end.toISOString().split("T")[0]);
-
-  // Вызываем validateDates для активации/деактивации кнопок
-  validateDates();
 }
 
 function calculateDays(startDate, endDate, dayType) {
@@ -341,38 +433,6 @@ function calculateDays(startDate, endDate, dayType) {
   }
 
   return totalDays;
-}
-
-function calculateWeekdays(startDate, endDate) {
-  let count = 0;
-  let currentDate = new Date(startDate);
-  const end = new Date(endDate);
-
-  while (currentDate <= end) {
-    const day = currentDate.getDay();
-    if (day !== 0 && day !== 6) {
-      // Будние дни (Пн-Пт)
-      count++;
-    }
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-  return count;
-}
-
-function calculateWeekends(startDate, endDate) {
-  let count = 0;
-  let currentDate = new Date(startDate);
-  const end = new Date(endDate);
-
-  while (currentDate <= end) {
-    const day = currentDate.getDay();
-    if (day === 0 || day === 6) {
-      // Выходные (Сб-Вс)
-      count++;
-    }
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-  return count;
 }
 
 function calculateHours(startDate, endDate, dayType) {
@@ -484,6 +544,7 @@ function calculateSeconds(startDate, endDate, dayType) {
   return totalSeconds;
 }
 
+// Це ф-ція, де відбувається весь розрахунок Днів/Годин/Хвили/Секунд між датами
 function updateNewWindow() {
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
@@ -497,6 +558,8 @@ function updateNewWindow() {
   const unitMinutesChecked = document.getElementById("minutes").checked;
   const unitSecondsChecked = document.getElementById("seconds").checked;
 
+  console.log('unitHoursChecked', unitHoursChecked);
+
   // Додаємо заголовок з датами
   let resultHTML = `<h2 class="result-title">Between ${startDate} and ${endDate}:</h2><ul class="result-list">`;
 
@@ -504,23 +567,14 @@ function updateNewWindow() {
   const units = [
     { checked: unitDaysChecked, calculate: calculateDays, label: "days" },
     { checked: unitHoursChecked, calculate: calculateHours, label: "hours" },
-    {
-      checked: unitMinutesChecked,
-      calculate: calculateMinutes,
-      label: "minutes",
-    },
-    {
-      checked: unitSecondsChecked,
-      calculate: calculateSeconds,
-      label: "seconds",
-    },
+    { checked: unitMinutesChecked, calculate: calculateMinutes, label: "minutes",},
+    { checked: unitSecondsChecked, calculate: calculateSeconds, label: "seconds",},
   ];
 
   if (allDaysChecked) {
     const dayType = "CD";
     units.forEach((unit) => {
       if (unit.checked) {
-        console.log("UNIT", unit);
         const totalValue = unit.calculate(startDate, endDate, dayType);
         resultHTML += `<li> ${totalValue} <strong>${unit.label}</strong></li>`;
       }
@@ -531,7 +585,6 @@ function updateNewWindow() {
     const dayType = "WK";
     units.forEach((unit) => {
       if (unit.checked) {
-        console.log("UNIT", unit);
         const totalValue = unit.calculate(startDate, endDate, dayType);
         resultHTML += `<li> ${totalValue} week<strong>${unit.label}</strong></li>`;
       }
@@ -542,7 +595,6 @@ function updateNewWindow() {
     const dayType = "WD";
     units.forEach((unit) => {
       if (unit.checked) {
-        console.log("UNIT", unit);
         const totalValue = unit.calculate(startDate, endDate, dayType);
         resultHTML += `<li> ${totalValue} weekend<strong>${unit.label}</strong></li>`;
       }
@@ -557,46 +609,23 @@ function updateNewWindow() {
   }
 }
 
-document.getElementById("allDays").addEventListener("change", updateNewWindow);
-document.getElementById("weekDays").addEventListener("change", updateNewWindow);
-document.getElementById("weekEnds").addEventListener("change", updateNewWindow);
+// document.getElementById("allDays").addEventListener("change", updateNewWindow);
+// document.getElementById("weekDays").addEventListener("change", updateNewWindow);
+// document.getElementById("weekEnds").addEventListener("change", updateNewWindow);
 
-document.getElementById("days").addEventListener("change", updateNewWindow);
-document.getElementById("hours").addEventListener("change", updateNewWindow);
-document.getElementById("minutes").addEventListener("change", updateNewWindow);
-document.getElementById("seconds").addEventListener("change", updateNewWindow);
-
-document.getElementById("startDate").addEventListener("change", function () {
-  console.log("Попали в івентлисенер СтартДейт");
-  localStorage.setItem("startDate", this.value);
-  validateDates();
-  updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
-});
+// document.getElementById("days").addEventListener("change", updateNewWindow);
+// document.getElementById("hours").addEventListener("change", updateNewWindow);
+// document.getElementById("minutes").addEventListener("change", updateNewWindow);
+// document.getElementById("seconds").addEventListener("change", updateNewWindow);
 
 document.getElementById("endDate").addEventListener("change", function () {
-  console.log("Попали в івентлисенер ЕндДейт");
+  //console.log("Попали в івентлисенер ЕндДейт");
   localStorage.setItem("endDate", this.value);
-  validateDates();
+
   updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
 });
 
-document.getElementById("week").addEventListener("click", function () {
-  console.log("попали в лисенер вик");
-  setPeriod("week");
-  const newWindow = document.getElementById("newWindow");
-  if (newWindow && newWindow.style.display === "flex") {
-    updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
-  }
-});
 
-document.getElementById("month").addEventListener("click", function () {
-  console.log("попали в лисенер монс");
-  setPeriod("month");
-  const newWindow = document.getElementById("newWindow");
-  if (newWindow && newWindow.style.display === "flex") {
-    updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
-  }
-});
 
 document.getElementById("resetButton").addEventListener("click", function () {
   // Чистимо поля з датами
@@ -639,7 +668,7 @@ document.getElementById("resetButton").addEventListener("click", function () {
   }
 });
 
-checkAllConditions();
+//checkAllConditions();
 
 // WINDOW2
 
@@ -684,8 +713,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Завантажуємо список країн з АПІшки
-  await fetchCountries();
+  //await fetchCountries();
 
   // Тут реалізуємо логіку активації/деактивації поля вибору року за умови якщо ми обрали країну
   countrySelect.addEventListener("change", () => {

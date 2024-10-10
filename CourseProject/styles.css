@@ -51,8 +51,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5em;
-  color: #333;
+  font-size: 0.9em; 
+  color: #000; 
   opacity: 1;
   transform: scale(1);
 }
@@ -73,10 +73,12 @@ body {
 #newWindow li {
   line-height: 1.5; /* Space between lines to ensure readability */
   margin-bottom: 8px; /* Space between list items */
+  color: #000;
 }
 
 #newWindow .result-title {
   font-size: 1em; /* Slightly smaller title */
+  color: #000;
 }
 /* NEW WINDOW END */
 
