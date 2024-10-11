@@ -10,6 +10,9 @@
 // При ПОВТОРНОМУ натискання на кнопку ТИЖДЕЬ, отримаємо календанрий тиждень на екрані по значенню в initialStartDate , тобто:
 // ЗНОВУ startDate = 30.09.2024 - endDate = 06.10.2024
 
+import { handleDateChange } from './datesHandler.js';
+import { setPeriod } from './datesHandler.js';
+
 let initialStartDate = localStorage.getItem("initialStartDate")
   ? new Date(localStorage.getItem("initialStartDate"))
   : null;
@@ -42,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     createNewWindow();
   }
 
-
   const getCheckboxes = (buttonId) => {
     return document.querySelectorAll(
       `#${buttonId} + .dropdown-content input[type="checkbox"]`
@@ -57,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const unitsCheckboxes = getCheckboxes("unitsButton");
 
 
-    // Восстанавливаем состояние чекбоксов DAYS
+    // Відновлюємо стан чекбоксів DAYS
     daysCheckboxes.forEach((checkbox) => {
       const checkboxId = checkbox.id;
       if (localStorage.getItem(checkboxId) === "true") {
@@ -65,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   
-    // // Восстанавливаем состояние чекбоксов UNITS
+    //  Відновлюємо стан чекбоксів UNITS
     unitsCheckboxes.forEach((checkbox) => {
       const checkboxId = checkbox.id;
       if (localStorage.getItem(checkboxId) === "true") {
@@ -74,15 +76,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   
-    // Восстанавливаем состояние кнопки Days
+    // ВВідновлюємо стан кнопки Days
     if (localStorage.getItem("daysButtonEnabled") === "true") {
       daysButton.disabled = false;
     }
   
-    // // Восстанавливаем состояние кнопки Units
-    // if (localStorage.getItem("unitsButtonEnabled") === "true") {
-    //   unitsButton.disabled = false;
-    // }
+    // Відновлюємо стан кнопки Units
+    if (localStorage.getItem("unitsButtonEnabled") === "true") {
+      unitsButton.disabled = false;
+    }
   
    // Восстанавливаем состояние кнопок Week и Month
     if (localStorage.getItem("weekActive") === "true") {
@@ -108,64 +110,17 @@ document.addEventListener("DOMContentLoaded", () => {
     checkAllConditions(startDateInput, endDateInput, daysChecked, unitsChecked);
   };
 
-  // Функция для обработки изменений дат
-  function handleDateChange(startDate, endDate) {
-    // Обработка startDate
-    if (startDate) {
-      // Сохраняем initialStartDate только если его еще не было установлено
-
-      endDateInput.disabled = false;
-      endDateInput.min = startDate;
-      weekButton.disabled = false;
-      monthButton.disabled = false;
-      localStorage.setItem("startDate", startDate);
-      
-
-    } else {
-      endDateInput.disabled = true;
-      endDateInput.value = "";
-      weekButton.disabled = true;
-      monthButton.disabled = true;
-      localStorage.removeItem("startDate");
-    }
-
-    // Обработка endDate
-    if (endDate) {
-      // Если стартовая дата больше конечной, очищаем endDate
-      if (new Date(startDate) > new Date(endDate)) {
-        endDateInput.value = "";
-        localStorage.removeItem("endDate");
-      } else {
-        localStorage.setItem("endDate", endDate);
-      }
-    } else {
-      localStorage.removeItem("endDate");
-    }
-
-    // Активуємо/деактивуємо кнопку "Days"
-    if (startDate && endDate) {
-      daysButton.disabled = false;
-      localStorage.setItem("daysButtonEnabled", "true");
-    } else {
-      daysButton.disabled = true;
-    }
-  }
 
   startDateInput.addEventListener("change", function () {
     localStorage.setItem("initialStartDate", this.value);
     initialStartDate = new Date(this.value);
-
-    const startDate = this.value;
-    const endDate = endDateInput.value; // Получаем текущее значение endDate
-    handleDateChange(startDate, endDate); // Обрабатываем обе даты
+    handleDateChange(startDateInput, endDateInput, weekButton, monthButton); // Обрабатываем обе даты
     updateNewWindow(); // Якщо змінили значення startDate, то перераховуємо дні/години/хвилини/секунди у новому вікні
   });
 
   // Обработка изменения конечной даты
   endDateInput.addEventListener("change", function () {
-    const startDate = startDateInput.value; // Получаем текущее значение startDate
-    const endDate = this.value;
-    handleDateChange(startDate, endDate); // Обрабатываем обе даты
+    handleDateChange(startDateInput, endDateInput, weekButton, monthButton); // Обрабатываем обе даты
   });
 
 
@@ -173,14 +128,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   weekButton.addEventListener("click", function () {
-    setPeriod("week");
+    setPeriod(weekButton, initialStartDate);
     const newWindow = document.getElementById("newWindow");
     if (newWindow && newWindow.style.display === "flex") {
       updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
     }
-    const startDate = startDateInput.value;
-    const endDate = endDateInput.value; // Получаем текущее значение endDate
-    handleDateChange(startDate, endDate); // Обрабатываем обе даты
+    handleDateChange(startDateInput, endDateInput, weekButton, monthButton); // Обрабатываем обе даты
     updateNewWindow(); // Якщо змінили значення startDate, то перераховуємо дні/години/хвилини/секунди у новому вікні
     localStorage.setItem("weekActive", "true"); // Save state to localStorage
     localStorage.setItem("monthActive", "false");
@@ -189,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("month").addEventListener("click", function () {
     // console.log("попали в лисенер монс");
-    setPeriod("month");
+    setPeriod(monthButton, initialStartDate);
     const newWindow = document.getElementById("newWindow");
     if (newWindow && newWindow.style.display === "flex") {
       updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
@@ -198,14 +151,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   monthButton.addEventListener("click", function () {
-    setPeriod("month");
+    setPeriod(monthButton, initialStartDate);
     const newWindow = document.getElementById("newWindow");
     if (newWindow && newWindow.style.display === "flex") {
       updateNewWindow(); // Оновлюємо вікно тільки якщо воно активне
     }
-    const startDate = startDateInput.value;
-    const endDate = endDateInput.value; // Получаем текущее значение endDate
-    handleDateChange(startDate, endDate); // Обрабатываем обе даты
+    handleDateChange(startDateInput, endDateInput, weekButton, monthButton); // Обрабатываем обе даты
     updateNewWindow(); // Якщо змінили значення startDate, то перераховуємо дні/години/хвилини/секунди у новому вікні
     localStorage.setItem("monthActive", "true"); // Save state to localStorage
     localStorage.setItem("weekActive", "false");
@@ -246,13 +197,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
+
+
+
 // Тут ми перевіримо, чи всі умови виконані для того щоб створити додаткове вікно з результатами розрахунків
 // Необхідні умови:
 // 1. Заповнені поля startDate і endDate
 // 2. Обраний хочаб один тип дня
 // 3. Обраний хочаб одна одиниця вимірювання
-function checkAllConditions( startDateInput, endDateInput, daysChecked, unitsChecked) 
-{
+function checkAllConditions( startDateInput, endDateInput, daysChecked, unitsChecked) {
   const startDate = startDateInput.value;
   const endDate = endDateInput.value;
 
@@ -324,78 +278,7 @@ async function switchWindow(windowNumber) {
   }, 100); // Затримка перемикання
 }
 
-// Знаходимо понеділок для опціїї Week
-function getMonday(date) {
-  // Створюємо копію вхідної дати, аби не змінювати оигінал
-  const monday = new Date(date);
-  // Отримуємо день тижня (0 - неділя, 1 - понеділок, ..., 6 - субота )
-  const day = monday.getDay();
-  // Якщо це неділя (day === 0), віднімаємо 6 днів для отримання понеділка
-  // інакше - зміщуємо на к=сть днів до понеділка
-  const diff = (day === 0 ? -6 : 1) - day;
-  monday.setDate(date.getDate() + diff);
 
-  return monday;
-}
-
-// Особливості роботи кнопок WEEK і MONTH:
-// Коли користувач ввів вперше СтартДейт, то це значення запишеться в  localStorage як initialStartDate
-// Коли користувач буде натискати на WEEK і MONTH, саме initialStartDate буде використовуватись для підрахунку меж тижня і місяця
-// Тобто при клацанні туди-сюди на WEEK і MONTH завжди буде той самий тиждень і той самий місяць.
-// Як тільки користувач руками змінить значення в СтартДейт, то нове значення запишеться в  localStorage як initialStartDate і логіка WEEK і MONTH повториться як описано вище
-
-function setPeriod(period) {
-  const weekButton = document.getElementById("week");
-  const monthButton = document.getElementById("month");
-
-  //console.log("попали в setPeriod");
-
-  // Знімаємо активний стан кнопок
-  weekButton.classList.remove("active");
-  monthButton.classList.remove("active");
-
-  // Отримуємо початкову дату з інпуту або з  localStorage
-  let startDate = new Date(
-    localStorage.getItem("startDate") ||
-      document.getElementById("startDate").value
-  );
-  //  let start, end;
-
-  // Це будуть проміжні дати початку і кінця, які ми використаємо для подрахунку тижня і місяця
-  let start = new Date(startDate);
-  let end = new Date(startDate);
-
-  // Активуємо кнопки
-  if (period === "week") {
-    // Активуємо натиснену кнопку
-    weekButton.classList.add("active");
-
-    start = getMonday(initialStartDate);
-    end = new Date(start);
-    end.setDate(start.getDate() + 6);
-  } else if (period === "month") {
-    // Активуємо натисну кнопку
-    monthButton.classList.add("active");
-    // Дуууууже довго не міг зрозуміти чому в цьому рядку start повертає перший день місяця, а на екрані в startDate я бачу останній день попередньго місяця.
-    // Гугл підказав додати до конструкції Date.UTC, бо це могло статися через часові пояси. Тепер все Ок.
-    start = new Date(
-      Date.UTC(startDate.getFullYear(), initialStartDate.getMonth(), 1)
-    );
-    end = new Date(
-      Date.UTC(startDate.getFullYear(), initialStartDate.getMonth() + 1, 0)
-    );
-  }
-
-  // Тут оновимо значення на екрані в полях "startDate" і "endDate" на основі вирахуваних значень у змінних start і end
-  document.getElementById("startDate").value = start
-    .toISOString()
-    .split("T")[0];
-  document.getElementById("endDate").value = end.toISOString().split("T")[0];
-
-  // Обновляем localStorage
-  localStorage.setItem("startDate", start.toISOString().split("T")[0]);
-  localStorage.setItem("endDate", end.toISOString().split("T")[0]);
-}
 
 function calculateDays(startDate, endDate, dayType) {
   const start = new Date(startDate);
@@ -674,7 +557,7 @@ document.getElementById("resetButton").addEventListener("click", function () {
 
 // API KEY: 'QBU9fmsfhOjN41RGVjOMuvSh86PP93Fk'
 
-const API_KEY = "Gr2z94IRJyzgU5JFjzGl1QStorZdpPit";
+// const API_KEY = "Gr2z94IRJyzgU5JFjzGl1QStorZdpPit";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const countrySelect = document.getElementById("countrySelect");

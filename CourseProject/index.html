@@ -10,6 +10,15 @@
 
   <body>
     <div class="container">
+
+
+        <!-- Группа кнопок для переключения окон -->
+        <div class="button-group">
+          <button onclick="switchWindow(1)" class="active">Date calculator</button>
+          <button onclick="switchWindow(2)">Holiday calendar</button>
+      </div>
+
+
       <div id="window1" class="window active">
         <button id="resetButton" class="reset-btn">
           <svg
@@ -74,10 +83,10 @@
         <div id="holidaysTable"></div>
       </div>
     </div>
-    <div class="circles">
+    <!-- <div class="circles">
       <div class="circle active" onclick="switchWindow(1)"></div>
       <div class="circle" onclick="switchWindow(2)"></div>
-    </div>
-    <script src="script.js"></script>
+    </div> -->
+    <script type="module" src="script.js"></script>
   </body>
 </html>
