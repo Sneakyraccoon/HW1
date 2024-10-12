@@ -14,8 +14,8 @@
 
         <!-- Группа кнопок для переключения окон -->
         <div class="button-group">
-          <button onclick="switchWindow(1)" class="active">Date calculator</button>
-          <button onclick="switchWindow(2)">Holiday calendar</button>
+          <button id="DAT"  class="active">Date calculator</button>
+          <button id="HOL">Holiday calendar</button>
       </div>
 
 
@@ -69,7 +69,9 @@
         </div>
       </div>
 
+
       <div id="window2" class="window">
+        <div class="left-panel">
         <label for="countrySelect">Выберите страну:</label>
         <select id="countrySelect">
           <option value="">-- Выберите страну --</option>
@@ -82,6 +84,12 @@
         <br /><br />
         <div id="holidaysTable"></div>
       </div>
+      <div class="right-panel">
+        <div id="holidaysTable"></div>
+      </div>
+    </div>
+
+
     </div>
     <!-- <div class="circles">
       <div class="circle active" onclick="switchWindow(1)"></div>
